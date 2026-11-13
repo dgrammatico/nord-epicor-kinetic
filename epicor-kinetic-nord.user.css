@@ -1,0 +1,1233 @@
+/* ==UserStyle==
+@name           Epicor Kinetic - Nord Polar Night
+@namespace      github.com/dgrammatico/nord-epicor-kinetic
+@version        9.1.0
+@description    Nord Polar Night dark theme for Epicor Kinetic (cloud and on-prem). Kendo UI colour variables + components, Epicor ep-/erp- wrappers.
+@author         Dominic Grammatico
+@homepageURL    https://github.com/dgrammatico/nord-epicor-kinetic
+@supportURL     https://github.com/dgrammatico/nord-epicor-kinetic/issues
+@updateURL      https://raw.githubusercontent.com/dgrammatico/nord-epicor-kinetic/main/epicor-kinetic-nord.user.css
+@license        MIT
+==/UserStyle== */
+
+/* How Kinetic is built (from inspecting a live page):
+   - Angular + Kendo UI for Angular: <kendo-dropdownlist>, <kendo-floatinglabel>, <kendo-panelbar-item>,
+     <kendo-dropdownbutton>, <kendo-svgicon> and standard .k-* classes.
+   - Epicor wrappers: <ep-text-box>, <erp-text-box>, <ep-nav-link> (grid drill-down links), <ep-...>/<erp-...>.
+   - [ep-object-id] on every component: designer ids are stable (e.g. numLandingPagePartNum);
+     auto ids (EpGrid427...) change between loads, so never target them.
+   - Stylus can't see the #hash, so everything here applies to all of Kinetic. */
+
+/* ===============================================================
+   1. ALL KINETIC SITES (any host whose path is /<instance>/Apps/ERP/...)
+   =============================================================== */
+@-moz-document regexp("https?://[^/]+/[^/]+/[Aa][Pp][Pp][Ss]/[Ee][Rr][Pp]/.*") {
+
+  :root {
+    color-scheme: dark;
+    --nord-base: #2e3440;
+    --nord-deep: #272c36;
+    --nord-raised: #3b4252;
+    --nord-high: #434c5e;
+    --nord-line: #4c566a;
+    --nord-text: #d8dee9;
+    --nord-dim: #a3adbf;
+    --nord-accent: #88c0d0;
+    --nord-green: #a3be8c; --nord-yellow: #ebcb8b; --nord-red: #bf616a; --nord-orange: #d08770;
+
+    /* Kendo UI v6+ theme variables (used by newer Kinetic releases) */
+    --kendo-color-app-surface: var(--nord-base) !important;
+    --kendo-color-on-app-surface: var(--nord-text) !important;
+    --kendo-color-surface: var(--nord-raised) !important;
+    --kendo-color-surface-alt: var(--nord-base) !important;
+    --kendo-color-subtle: var(--nord-dim) !important;
+    --kendo-color-base: var(--nord-raised) !important;
+    --kendo-color-base-hover: var(--nord-high) !important;
+    --kendo-color-base-active: var(--nord-high) !important;
+    --kendo-color-base-subtle: var(--nord-raised) !important;
+    --kendo-color-on-base: var(--nord-text) !important;
+    --kendo-color-border: var(--nord-line) !important;
+    --kendo-color-border-alt: var(--nord-line) !important;
+    --kendo-color-primary: var(--nord-accent) !important;
+    --kendo-color-primary-hover: #8fbcbb !important;
+    --kendo-color-primary-active: #81a1c1 !important;
+    --kendo-color-primary-subtle: rgba(136, 192, 208, .15) !important;
+    --kendo-color-on-primary: var(--nord-base) !important;
+    --kendo-color-success: var(--nord-green) !important;
+    --kendo-color-warning: var(--nord-yellow) !important;
+    --kendo-color-error: var(--nord-red) !important;
+    --kendo-color-info: #81a1c1 !important;
+    --kendo-color-series-a: #88c0d0 !important;
+  }
+
+  /* Page and shell */
+  html, body, app-root, .k-body, .k-content, .k-widget, .k-pane, .k-splitter, .k-card, .k-panel {
+    background-color: var(--nord-base) !important;
+    color: var(--nord-text) !important;
+    border-color: var(--nord-line) !important;
+  }
+  body * { border-color: var(--nord-line); }
+  a, a:visited, .k-link { color: var(--nord-accent) !important; }
+  ::selection { background: rgba(136, 192, 208, .35); color: #eceff4; }
+
+  /* Headers, toolbars, app bars, side nav */
+  header, nav, .k-appbar, .k-toolbar, .k-header, .k-drawer, .k-drawer-container, .k-drawer-items,
+  .k-tabstrip-items, .k-tabstrip-items-wrapper, .k-panelbar > .k-item > .k-link {
+    background-color: var(--nord-deep) !important;
+    color: var(--nord-text) !important;
+    border-color: var(--nord-line) !important;
+  }
+  .k-drawer-item:hover, .k-tabstrip-item:hover, .k-panelbar .k-link:hover { background-color: var(--nord-raised) !important; }
+  .k-drawer-item.k-selected, .k-tabstrip-item.k-active, .k-tabstrip-item.k-state-active {
+    background-color: var(--nord-high) !important; color: #eceff4 !important;
+    box-shadow: inset 0 -2px 0 var(--nord-accent) !important;
+  }
+  .k-tabstrip-content, .k-tabstrip > .k-content { background-color: var(--nord-base) !important; }
+
+  /* Cards, windows, dialogs, popups */
+  .k-window, .k-dialog, .k-window-content, .k-dialog-content, .k-popup, .k-animation-container .k-popup,
+  .k-menu-popup, .k-list-container, .k-tooltip, .k-notification, .k-expander, .k-card-body {
+    background-color: var(--nord-raised) !important;
+    color: var(--nord-text) !important;
+    border-color: var(--nord-line) !important;
+  }
+  .k-window-titlebar, .k-dialog-titlebar, .k-card-header, .k-expander-header {
+    background-color: var(--nord-deep) !important; color: #eceff4 !important; border-color: var(--nord-line) !important;
+  }
+  .k-overlay { background-color: #000 !important; opacity: .5 !important; }
+
+  /* Inputs */
+  input, textarea, select, .k-input, .k-textbox, .k-textarea, .k-picker, .k-dropdown, .k-dropdownlist,
+  .k-combobox, .k-numerictextbox, .k-datepicker, .k-datetimepicker, .k-multiselect, .k-input-inner,
+  .k-dropdown-wrap, .k-picker-wrap, .k-numeric-wrap, .k-multiselect-wrap {
+    background-color: var(--nord-base) !important;
+    color: var(--nord-text) !important;
+    border-color: var(--nord-line) !important;
+  }
+  input:focus, textarea:focus {
+    border-color: var(--nord-accent) !important;
+    box-shadow: 0 0 0 1px var(--nord-accent) !important;
+  }
+  input::placeholder, textarea::placeholder, .k-input-inner::placeholder { color: #7b88a1 !important; }
+  input:disabled, .k-disabled, .k-state-disabled { opacity: .75 !important; }
+  .k-input-button, .k-select, .k-spinner-increase, .k-spinner-decrease {
+    background-color: var(--nord-raised) !important; color: var(--nord-dim) !important; border-color: var(--nord-line) !important;
+  }
+  .k-checkbox, .k-radio { background-color: var(--nord-base) !important; border-color: var(--nord-line) !important; }
+  .k-checkbox:checked, .k-radio:checked, .k-checkbox.k-checked { background-color: var(--nord-accent) !important; border-color: var(--nord-accent) !important; }
+
+  /* Buttons */
+  button, .k-button {
+    background-color: var(--nord-high) !important; color: var(--nord-text) !important;
+    border-color: var(--nord-line) !important; background-image: none !important;
+  }
+  button:hover, .k-button:hover, .k-button.k-hover { background-color: var(--nord-line) !important; }
+  .k-button-solid-primary, .k-button.k-primary, .k-primary {
+    background-color: var(--nord-accent) !important; color: var(--nord-base) !important; border-color: var(--nord-accent) !important;
+  }
+  .k-button-solid-primary:hover, .k-button.k-primary:hover { background-color: #8fbcbb !important; }
+  .k-button-flat, .k-button-flat-base, .k-flat { background-color: transparent !important; }
+
+  /* Lists, menus, dropdown items */
+  .k-list, .k-list-content, .k-list-ul, .k-menu, .k-menu-group, .k-treeview { background-color: transparent !important; color: var(--nord-text) !important; }
+  .k-list-item:hover, .k-list .k-item:hover, .k-menu-item:hover > .k-link, .k-treeview-leaf:hover, .k-hover, .k-state-hover {
+    background-color: var(--nord-high) !important; color: #eceff4 !important;
+  }
+  .k-list-item.k-selected, .k-list .k-item.k-state-selected, .k-treeview-leaf.k-selected, .k-selected, .k-state-selected {
+    background-color: rgba(136, 192, 208, .22) !important; color: #eceff4 !important;
+  }
+
+  /* Grids (the bulk of Kinetic) */
+  .k-grid, .k-grid-container, .k-grid-content, .k-grid-content-locked, .k-grid-table, .k-grid-aria-root {
+    background-color: var(--nord-base) !important; color: var(--nord-text) !important; border-color: var(--nord-line) !important;
+  }
+  .k-grid-header, .k-grid-header-wrap, .k-grid-header-locked, .k-grid th, .k-grid .k-header, .k-grid-toolbar,
+  .k-grouping-header, .k-grid-pager, .k-pager, .k-pager-wrap, .k-grid-footer, .k-grid-footer-wrap {
+    background-color: var(--nord-deep) !important; color: var(--nord-dim) !important; border-color: var(--nord-line) !important;
+  }
+  .k-grid td, .k-grid tr { border-color: rgba(76, 86, 106, .55) !important; background-color: transparent; }
+  .k-grid tr.k-alt, .k-grid .k-table-alt-row, .k-grid tr:nth-child(even) { background-color: rgba(59, 66, 82, .55) !important; }
+  .k-grid tr:hover, .k-grid .k-table-row:hover, .k-grid tr.k-hover { background-color: var(--nord-high) !important; }
+  .k-grid tr.k-selected > td, .k-grid td.k-selected, .k-grid tr.k-state-selected > td, .k-grid .k-table-row.k-selected > td {
+    background-color: rgba(136, 192, 208, .22) !important; color: #eceff4 !important;
+  }
+  .k-grid .k-grouping-row td, .k-grid .k-group-cell { background-color: var(--nord-raised) !important; }
+  .k-pager-numbers .k-link.k-selected, .k-pager-numbers .k-state-selected { background-color: var(--nord-accent) !important; color: var(--nord-base) !important; }
+
+  /* Status colours stay Nord */
+  .k-text-success, .k-color-success { color: var(--nord-green) !important; }
+  .k-text-warning, .k-color-warning { color: var(--nord-yellow) !important; }
+  .k-text-error, .k-color-error, .k-invalid, .ng-invalid.ng-touched { color: var(--nord-red) !important; }
+  .k-notification-success { border-left: 3px solid var(--nord-green) !important; }
+  .k-notification-error   { border-left: 3px solid var(--nord-red) !important; }
+  .k-notification-warning { border-left: 3px solid var(--nord-yellow) !important; }
+
+  /* Scrollbars */
+  * { scrollbar-color: #4c566a transparent; }
+
+
+  /* ---- Epicor design tokens (the app is built on these; flipped to Nord Polar Night) ---- */
+  :root, html, body {
+    --base: #2e3440 !important;
+    --neutral: #3b4252 !important;          /* white surfaces -> nord1 */
+    --nothing: #d8dee9 !important;          /* black text -> snow storm */
+    --neutral-95: #3b4252 !important; --neutral-80: #4c566a !important; --neutral-52: #7b88a1 !important;
+    --neutral-38: #a3adbf !important; --neutral-27: #d8dee9 !important; --neutral-20: #e5e9f0 !important;
+    --primary: #434c5e !important; --primary-2485: #434c5e !important; --primary-2491: #3b4252 !important;
+    --primary-3468: #4c566a !important; --primary-3495: #3b4252 !important;
+    --secondary: #5e81ac !important; --tertiary: #4f6b60 !important;
+    --interactive: #81a1c1 !important; --interactive-24: #88c0d0 !important; --interactive-44: #5e81ac !important;
+    --interactive-54: #81a1c1 !important; --interactive-82: #434c5e !important; --interactive-x96: #3b4252 !important;
+    --accent: #a0705a !important; --manufacturing: #4c6676 !important; --distribution: #8a5a5f !important;
+    --distribution-x50: #bf616a !important; --distribution-x73: #8f5a5f !important;
+    --automotive: #4c566a !important; --building-supply: #6b7a52 !important; --retail: #8a7a52 !important;
+    --success: #a3be8c !important; --success-9532: #6f8f5b !important; --success-3682: #3f4f43 !important;
+    --success-4566: #5f7a54 !important; --success-x96: #3b4a3f !important;
+    --error: #bf616a !important; --error-50: #bf616a !important; --error-91: #4a3a44 !important;
+    --warning: #ebcb8b !important; --warning-41: #d8b26e !important; --warning-91: #4d4637 !important;
+    --info: #81a1c1 !important; --info-x92: #3b4252 !important;
+    --selected: #4c566a !important; --selected-93: #434c5e !important; --selected-97: #3b4252 !important;
+    --focus: transparent !important;
+    --bs-body-bg: #2e3440 !important; --bs-body-color: #d8dee9 !important;
+  }
+
+  /* ---- Kinetic shell (ep-*) and home page (khp-*) ---- */
+  .ep-shell, .ep-shell-container, .ep-content, .ep-view, .ep-view-content, .ep-view-fixed-header, .ep-view-header,
+  .ep-box-grid-container, .ep-box-grid-scroller, .ep-tab-strip .k-tabstrip-items-wrapper, khp-homepage {
+    background-color: #2e3440 !important;
+  }
+  .ep-menu-bar-container { background-color: #272c36 !important; }
+  /* menu icons are filled with --neutral (white in Epicor's scheme): keep them light here */
+  .ep-menu-bar-container { --neutral: #88c0d0 !important; --nothing: #88c0d0 !important; color: #88c0d0 !important; }
+  .ep-menu-bar-container .ep-menu-bar-item:hover { background-color: #3b4252 !important; }
+  .ep-menu-bar-container .ep-menu-bar-item.active { background-color: #3b4252 !important; box-shadow: inset 3px 0 0 #88c0d0 !important; }
+  .ep-sidebar { background-color: #2e3440 !important; color: #d8dee9 !important; border-color: #4c566a !important; }
+  .ep-view-header h1, h1 { color: #eceff4 !important; }
+  .ep-indicator { background-color: transparent !important; }
+  .ep-indicator-text { background-color: #434c5e !important; color: #88c0d0 !important; }
+  span.khp-tile { background-color: transparent !important; }
+  .khp-tile-caption, .tile-foreground, khp-tile-icon, khp-tile-icon * { color: #eceff4 !important; fill: currentColor; }
+  .khp-tile.tile-background { border-radius: 6px; }
+  .khp-tile.tile-background:hover { filter: brightness(1.12); }
+  .khp-tile-text-content { color: #d8dee9 !important; }
+  .tabTitle { color: #88c0d0 !important; }
+  .k-grid-norecords, .k-grid-norecords-template, .k-grid .k-grid-norecords td { background-color: #2e3440 !important; color: #a3adbf !important; }
+
+  /* ---- Epicor wrappers ---- */
+  ep-nav-link a, erp-nav-link a { color: #88c0d0 !important; font-weight: 600; text-decoration: none; }
+  ep-nav-link a:hover, erp-nav-link a:hover { color: #8fbcbb !important; text-decoration: underline; }
+  kendo-floatinglabel .k-label, kendo-floatinglabel label, .k-floating-label, .k-label { color: #a3adbf !important; }
+  kendo-floatinglabel.k-focus .k-label, .k-floating-label-container.k-focus .k-floating-label { color: #88c0d0 !important; }
+  kendo-svgicon, .k-svg-icon, .k-icon { color: inherit; fill: currentColor; }
+  .k-grid .k-grid-header th, .k-grid .k-table-th { font-weight: 600; }
+  .k-grid .k-table-row.k-alt, .k-grid .k-table-alt-row { background-color: rgba(59, 66, 82, .55) !important; }
+  .k-grid .k-table-row:hover { background-color: #434c5e !important; }
+  .k-grid .k-table-row.k-selected > td { background-color: rgba(136, 192, 208, .22) !important; color: #eceff4 !important; }
+  h1, h2, h3, h4, .k-card-title { color: #eceff4 !important; }
+
+  /* ===== Layout: page #2e3440 > cards #3b4252 > fields #2e3440 (sunken) ===== */
+  .ep-panel-card { background-color: #3b4252 !important; border: 0 !important; border-radius: 8px !important; box-shadow: none !important; }
+  kendo-panelbar.k-panelbar, kendo-panelbar-item, .k-panelbar-header, .k-panelbar-content, .k-panelbar-group {
+    background: transparent !important; border: 0 !important; box-shadow: none !important;
+  }
+  kendo-panelbar-item > .k-link, .k-panelbar-header > .k-link, .k-panelbar .k-link {
+    background: transparent !important; color: #eceff4 !important; font-weight: 600;
+    border: 0 !important; border-bottom: 1px solid rgba(76, 86, 106, .6) !important; box-shadow: none !important; outline: none !important;
+  }
+  .k-panelbar .k-link:hover { background: rgba(76, 86, 106, .25) !important; }
+
+  /* Fields: one rounded box (label + value), underline turns frost on focus */
+  .ep-component-top-element:is(.ep-text-box, .ep-numeric-box, .ep-combo-box, .ep-date-picker, .ep-date-time-picker, .ep-time-picker, .ep-drop-down-list, .ep-dropdown-list, .ep-multi-select, .ep-text-area, .ep-currency-box, .ep-masked-text-box) {
+    background-color: #2e3440 !important; border: 0 !important; border-radius: 4px !important;
+    box-shadow: inset 0 -1px 0 #4c566a !important; transition: box-shadow .12s;
+  }
+  .ep-component-top-element:is(.ep-text-box, .ep-numeric-box, .ep-combo-box, .ep-date-picker, .ep-date-time-picker, .ep-time-picker, .ep-drop-down-list, .ep-dropdown-list, .ep-multi-select, .ep-text-area, .ep-currency-box, .ep-masked-text-box) :is(input, textarea, .k-input, .k-textbox, .k-picker, .k-input-inner, .k-dropdownlist, .k-combobox, .k-numerictextbox, .k-datepicker, .k-input-button, .k-input-spinner, .k-spinner-increase, .k-spinner-decrease) {
+    background: transparent !important; border: 0 !important; box-shadow: none !important; outline: none !important; color: #e5e9f0 !important;
+  }
+  .ep-component-top-element:is(.ep-text-box, .ep-numeric-box, .ep-combo-box, .ep-date-picker, .ep-date-time-picker, .ep-time-picker, .ep-drop-down-list, .ep-dropdown-list, .ep-multi-select, .ep-text-area, .ep-currency-box, .ep-masked-text-box) .k-floating-label { color: #8f9bb3 !important; }
+  .ep-component-top-element:is(.ep-text-box, .ep-numeric-box, .ep-combo-box, .ep-date-picker, .ep-date-time-picker, .ep-time-picker, .ep-drop-down-list, .ep-dropdown-list, .ep-multi-select, .ep-text-area, .ep-currency-box, .ep-masked-text-box) :is(.mdi, .k-svg-icon, .k-icon, kendo-svgicon) { color: #81a1c1 !important; fill: currentColor; }
+  .ep-component-top-element:is(.ep-text-box, .ep-numeric-box, .ep-combo-box, .ep-date-picker, .ep-date-time-picker, .ep-time-picker, .ep-drop-down-list, .ep-dropdown-list, .ep-multi-select, .ep-text-area, .ep-currency-box, .ep-masked-text-box):focus-within { box-shadow: inset 0 -2px 0 #88c0d0 !important; }
+  .ep-component-top-element:is(.ep-text-box, .ep-numeric-box, .ep-combo-box, .ep-date-picker, .ep-date-time-picker, .ep-time-picker, .ep-drop-down-list, .ep-dropdown-list, .ep-multi-select, .ep-text-area, .ep-currency-box, .ep-masked-text-box):focus-within .k-floating-label { color: #88c0d0 !important; }
+  /* Read-only / disabled: transparent with a dashed outline, muted text */
+  .ep-disabled > .ep-component-top-element:is(.ep-text-box, .ep-numeric-box, .ep-combo-box, .ep-date-picker, .ep-date-time-picker, .ep-time-picker, .ep-drop-down-list, .ep-dropdown-list, .ep-multi-select, .ep-text-area, .ep-currency-box, .ep-masked-text-box) {
+    background: transparent !important; box-shadow: none !important; outline: 1px dashed #4c566a; outline-offset: -1px;
+  }
+  .ep-disabled > .ep-component-top-element:is(.ep-text-box, .ep-numeric-box, .ep-combo-box, .ep-date-picker, .ep-date-time-picker, .ep-time-picker, .ep-drop-down-list, .ep-dropdown-list, .ep-multi-select, .ep-text-area, .ep-currency-box, .ep-masked-text-box) :is(input, textarea, .k-input-inner) { color: #a3adbf !important; opacity: 1 !important; }
+  .ep-disabled > .ep-component-top-element:is(.ep-text-box, .ep-numeric-box, .ep-combo-box, .ep-date-picker, .ep-date-time-picker, .ep-time-picker, .ep-drop-down-list, .ep-dropdown-list, .ep-multi-select, .ep-text-area, .ep-currency-box, .ep-masked-text-box) .k-floating-label { color: #8792ab !important; }
+
+  /* Tabs: flat, active one gets a frost underline */
+  .k-tabstrip-items-wrapper, .k-tabstrip-items { background: transparent !important; border: 0 !important; box-shadow: inset 0 -1px 0 rgba(76, 86, 106, .6) !important; }
+  .k-tabstrip-item, .k-tabstrip-item.k-active, .k-tabstrip-item:hover { background: transparent !important; border: 0 !important; }
+  .k-tabstrip-item { color: #a3adbf !important; box-shadow: none !important; }
+  .k-tabstrip-item .k-link { color: inherit !important; }
+  .k-tabstrip-item:hover { color: #eceff4 !important; }
+  .k-tabstrip-item.k-active { color: #88c0d0 !important; box-shadow: inset 0 -2px 0 #88c0d0 !important; }
+
+  /* Tree views (side navigation inside screens) */
+  ep-tree-view, .k-treeview, .k-treeview-leaf, .k-treeview-item { color: #d8dee9 !important; background: transparent !important; }
+  .k-treeview-leaf { border-radius: 4px; }
+  .k-treeview-leaf:hover { background: rgba(76, 86, 106, .4) !important; }
+  .k-treeview-leaf.k-selected, .k-treeview-leaf.k-focus { background: rgba(136, 192, 208, .18) !important; color: #eceff4 !important; box-shadow: none !important; }
+
+  /* Status pills / shaped checkboxes (Open, Active ...) */
+  .ep-shape-container { border-radius: 4px !important; }
+  .ep-background-green  { background: rgba(163, 190, 140, .16) !important; border-color: #a3be8c !important; }
+  .ep-background-red    { background: rgba(191, 97, 106, .16) !important;  border-color: #bf616a !important; }
+  .ep-background-yellow { background: rgba(235, 203, 139, .16) !important; border-color: #ebcb8b !important; }
+  .ep-background-orange { background: rgba(208, 135, 112, .16) !important; border-color: #d08770 !important; }
+  .ep-background-blue   { background: rgba(136, 192, 208, .16) !important; border-color: #88c0d0 !important; }
+  .ep-background-purple { background: rgba(180, 142, 173, .16) !important; border-color: #b48ead !important; }
+  [class*="ep-background-"], [class*="ep-background-"] * { color: #eceff4 !important; }
+  .ep-checkbox-label { color: #d8dee9 !important; }
+
+  /* ===== v5: polish (sidebar menu, rows, focus, radius, icons) ===== */
+  /* --primary is also Epicor's icon/text colour: keep it visible; tiles keep their grey explicitly */
+  :root, html, body { --primary: #81a1c1 !important; }
+  .khp-faveColor5 .tile-background { background-color: #434c5e !important; }
+  .khp-faveColor8 .tile-background { background-color: #4c566a !important; }
+
+  /* Rounded, consistent shapes */
+  button, .k-button { border-radius: 6px !important; }
+  .k-window, .k-dialog, .k-popup, .k-menu-popup, .k-list-container, .k-animation-container .k-popup { border-radius: 8px !important; }
+  .k-popup, .k-menu-popup { border: 1px solid #434c5e !important; box-shadow: 0 8px 24px rgba(0, 0, 0, .45) !important; padding: 4px !important; }
+
+  /* Icon-only buttons (kebab, filter, toolbar): no box, frost icon, soft hover */
+  .k-icon-button, .k-menu-button, .ep-dropdown-button .k-button, .k-button-flat {
+    background: transparent !important; border-color: transparent !important; color: #88c0d0 !important; box-shadow: none !important;
+  }
+  .k-icon-button :is(.mdi, .k-svg-icon, .k-icon, kendo-svgicon), .k-menu-button :is(.mdi, .k-svg-icon, .k-icon) { color: #88c0d0 !important; }
+  .k-icon-button:hover, .k-menu-button:hover, .ep-dropdown-button .k-button:hover, .k-button-flat:hover { background: rgba(76, 86, 106, .45) !important; }
+
+  /* Focus: one clean inset ring that follows the element's own corners */
+  .k-focus, .k-state-focused { box-shadow: none !important; }
+
+  /* Popup menus (kebab menu, context menus) */
+  .k-menu-popup .k-menu-link, .k-popup .k-menu-link, .k-popup .k-list-item { border-radius: 6px !important; }
+  .k-menu-popup .k-menu-item:hover > .k-menu-link {
+    background: rgba(76, 86, 106, .45) !important; color: #eceff4 !important; box-shadow: none !important; outline: none !important;
+  }
+  .k-menu-popup .k-menu-link :is(.mdi, .k-svg-icon, .k-icon) { color: #88c0d0 !important; }
+
+  /* Environment banner */
+  .ep-indicator-text { border: 0 !important; border-radius: 4px !important; padding: 0 6px !important; margin-left: 4px !important; }
+
+  /* Slide-out menu: one flat surface, no inset frames */
+  .ep-sidebar { background-color: #2e3440 !important; border-right: 1px solid #3b4252 !important; box-shadow: 6px 0 18px rgba(0, 0, 0, .35) !important; }
+  .ep-shell-panel-default-content, .ep-shell-menu-panel, .ep-shell-menu-panel-content { background: transparent !important; }
+  .ep-tab-strip .k-tabstrip-items-wrapper, .ep-sidebar .k-tabstrip-items-wrapper, .k-tabstrip-content, .k-tabstrip > .k-content { background: transparent !important; }
+  .tabTitle { color: inherit !important; }
+  .ep-search-input { background-color: #3b4252 !important; border: 1px solid #4c566a !important; border-radius: 6px !important; color: #e5e9f0 !important; box-shadow: none !important; }
+  .ep-search-input:focus { border-color: #88c0d0 !important; }
+  .ep-search-icon, .ep-search-cancel, .ep-search-cancel .mdi { color: #81a1c1 !important; }
+
+  /* Tree rows (menu tree and in-screen trees): whole row highlights, rounded */
+  .k-treeview-leaf, .k-treeview-leaf:hover, .k-treeview-leaf.k-selected, .k-treeview-leaf.k-focus { background: transparent !important; box-shadow: none !important; }
+  :is(.k-treeview-top, .k-treeview-mid, .k-treeview-bot) { border-radius: 6px; transition: background-color .1s; }
+  :is(.k-treeview-top, .k-treeview-mid, .k-treeview-bot):hover { background-color: rgba(76, 86, 106, .38) !important; }
+  :is(.k-treeview-top, .k-treeview-mid, .k-treeview-bot):has(> .k-treeview-leaf.k-selected) {
+    background-color: rgba(136, 192, 208, .16) !important; box-shadow: inset 2px 0 0 #88c0d0 !important;
+  }
+  .k-treeview-leaf.k-selected .k-treeview-leaf-text { color: #eceff4 !important; font-weight: 600; }
+  .k-treeview-toggle, .k-treeview-toggle * { color: #81a1c1 !important; }
+
+  /* Menu search results and flyout lists */
+  .ep-panel-link-search, [class*="ep-menu-panel-link"] > div { border-radius: 6px !important; transition: background-color .1s; }
+  .ep-panel-link-search:hover, [class*="ep-menu-panel-link"] > div:hover { background-color: rgba(76, 86, 106, .38) !important; }
+  .ep-panel-link-search.active, [class*="ep-menu-panel-link"] > div.active { background-color: rgba(136, 192, 208, .14) !important; box-shadow: inset 2px 0 0 #88c0d0 !important; }
+  .ep-menu-panel-search-item-description { color: #8f9bb3 !important; }
+  .ep-menu-panel-link-icon { color: #81a1c1 !important; }
+  .mdi-star-outline { color: #616e88 !important; }
+  .mdi-star-outline:hover { color: #88c0d0 !important; }
+  .mdi-star:not(.mdi-star-outline) { color: #ebcb8b !important; }
+
+  /* Tree rows: draw the highlight on a layer behind the row that also covers the expand arrow
+     (Kendo pulls the arrow 24px outside the row with a negative margin) */
+  :is(.k-treeview-top, .k-treeview-mid, .k-treeview-bot) { position: relative; isolation: isolate; background: transparent !important; box-shadow: none !important; }
+  :is(.k-treeview-top, .k-treeview-mid, .k-treeview-bot)::before {
+    content: ""; position: absolute; top: 1px; bottom: 1px; left: -26px; right: 2px; border-radius: 6px;
+    z-index: -1; transition: background-color .1s; pointer-events: none;
+  }
+  :is(.k-treeview-top, .k-treeview-mid, .k-treeview-bot):hover { background: transparent !important; }
+  :is(.k-treeview-top, .k-treeview-mid, .k-treeview-bot):hover::before { background: rgba(76, 86, 106, .5); }
+  :is(.k-treeview-top, .k-treeview-mid, .k-treeview-bot):has(> .k-treeview-leaf.k-selected) { background: transparent !important; box-shadow: none !important; }
+  :is(.k-treeview-top, .k-treeview-mid, .k-treeview-bot):has(> .k-treeview-leaf.k-selected)::before { background: rgba(136, 192, 208, .2); box-shadow: inset 3px 0 0 #88c0d0; }
+
+  /* Menu flyout (second column on wide windows) */
+  .ep-shell-menu-secondary-panel { background-color: #2e3440 !important; border-left: 1px solid #3b4252 !important; padding-left: 8px !important; padding-right: 8px !important; }
+  .ep-panel-link { border-radius: 6px !important; transition: background-color .1s; }
+  .ep-panel-link-search:hover, [class*="ep-menu-panel-link"] > div:hover, .ep-panel-link:hover { background-color: rgba(76, 86, 106, .5) !important; }
+  .ep-panel-link.active, .ep-panel-link.ep-selected { background-color: rgba(136, 192, 208, .18) !important; box-shadow: inset 3px 0 0 #88c0d0 !important; }
+  .ep-menu-panel-link-text { color: #d8dee9 !important; }
+
+  /* Popup menu rows: no square focus border (the rounded tint shows focus) */
+  .k-menu-item.k-focus, .k-menu-item:focus, .k-menu-item.k-focus > .k-menu-link { border-color: transparent !important; outline: none !important; }
+  .k-menu-group .k-menu-item { border: 0 !important; }
+
+  /* Epicor SVG icons with no fill default to black: make them follow the text colour */
+  ep-svg-icon svg:not([fill]), ep-svg-icon :is(path, circle, rect, polygon, ellipse):not([fill]) { fill: currentColor !important; }
+
+  /* ===== v6: slide-out panels, fields, focus, logo ===== */
+  /* Focus: no outline boxes */
+  :focus-visible { outline: none !important; }
+  /* Tabs: Epicor draws a square 1px --focus border on the focused tab; drop it so only the underline shows */
+  .k-tabstrip-items, .k-tabstrip-items * { --focus: transparent !important; }
+  .k-tabstrip-item:focus, .k-tabstrip-item:focus-visible, .k-tabstrip-item .k-link:focus-visible { outline: none !important; }
+  .k-tabstrip-item .k-link, .k-tabstrip-item.k-focus .k-link, .k-tabstrip-item .k-link:focus { border-color: transparent !important; outline: none !important; }
+
+  /* Epicor logo (white JPG): knock out the white, light wordmark */
+  img.ep-logo { filter: invert(1) grayscale(1) contrast(1.8) sepia(1) hue-rotate(150deg) saturate(1.6) brightness(1.05) !important; mix-blend-mode: screen; }
+
+  /* Home rail button hovers like the others */
+  .ep-menu-bar .ep-menu-bar-section .ep-home.ep-home:hover { background-color: #3b4252 !important; }
+  .ep-menu-bar .ep-menu-bar-section .ep-home.ep-home:hover #svgRoot.ep-svg-color svg, .ep-home #svgRoot.ep-svg-color:hover svg { fill: #88c0d0 !important; }
+
+  /* Menu tree: room on the left so the rounded highlight (which also covers the arrow) is never clipped */
+  .ep-shell-menu-panel .ep-tree-view, .ep-sidebar .ep-tree-view { padding-left: 18px !important; padding-right: 6px !important; }
+  :is(.k-treeview-top, .k-treeview-mid, .k-treeview-bot)::before { left: -24px !important; right: 0 !important; }
+
+  /* One hover colour for every list row */
+  :is(.k-treeview-top, .k-treeview-mid, .k-treeview-bot):hover::before { background: #434c5e !important; }
+  .ep-panel-link-search:hover, [class*="ep-menu-panel-link"] > div:hover, .ep-panel-link:hover, .ep-single-list-item:hover, .k-list-item:hover, .k-menu-popup .k-menu-item:hover > .k-menu-link { background-color: #434c5e !important; }
+
+  /* "No result found" */
+  .ep-shell-menu-panel .k-tabstrip-content div[class="ng-star-inserted"]:not(:has(*)), .ep-fav-no-results { color: #8f9bb3 !important; font-style: italic; padding: 8px 10px !important; }
+  .ep-panel-link-search:has(> .ep-fav-no-results) { background: transparent !important; box-shadow: none !important; }
+
+  /* Slide-out panels: one flat surface, no lighter boxes */
+  .ep-shell-panel, .ep-shell-help-panel, .ep-selection-list-container, .ep-selection-panel-list { background-color: transparent !important; }
+  ep-shell-help-panel { overflow-x: hidden !important; }
+  .ep-panel-list-header, .ep-account-panel-list-header { border: 0 !important; border-bottom: 1px solid rgba(76, 86, 106, .6) !important; border-radius: 0 !important; margin: 6px 4px 8px !important; padding: 0 0 6px !important; color: #8f9bb3 !important; letter-spacing: .04em; }
+
+  /* Help panel: article rows, search box, tabs */
+  .ep-single-list-item { background: transparent !important; border-radius: 6px !important; padding: 8px !important; margin: 0 0 2px !important; transition: background-color .1s; }
+  .ep-single-list-item .ep-item-text { color: #e5e9f0 !important; }
+  .ep-single-list-item .ep-item-description { color: #8f9bb3 !important; }
+  .ep-single-list-item .ep-lefticon, .ep-single-list-item .ep-lefticon .mdi { color: #81a1c1 !important; }
+  .ep-shell-help-panel .ep-autocomplete-input { background-color: #3b4252 !important; border: 1px solid #4c566a !important; border-radius: 6px !important; box-shadow: none !important; height: 36px !important; overflow: hidden; }
+  .ep-shell-help-panel .ep-autocomplete-input:focus-within { border-color: #88c0d0 !important; box-shadow: none !important; }
+  .ep-shell-help-panel .ep-autocomplete-input :is(kendo-autocomplete, .k-autocomplete) { height: 34px !important; border-radius: 6px !important; }
+  .ep-shell-help-panel .ep-autocomplete-input .k-input-inner { padding: 0 36px 0 12px !important; height: 34px !important; }
+  .ep-shell-help-panel .k-tabstrip-items .k-item { padding: 0 6px !important; }
+
+  /* Dropdown and autocomplete fields: same rounded field box as text boxes */
+  .ep-component-top-element:is(.ep-dropdown, .ep-autocomplete-input) {
+    background-color: #2e3440 !important; border: 0 !important; border-radius: 6px !important;
+    box-shadow: inset 0 -1px 0 #4c566a !important; transition: box-shadow .12s;
+  }
+  .ep-component-top-element:is(.ep-dropdown, .ep-autocomplete-input) :is(input, .k-input, .k-picker, .k-input-inner, .k-dropdownlist, .k-autocomplete, .k-input-button, .k-input-value-text) {
+    background: transparent !important; border: 0 !important; box-shadow: none !important; outline: none !important; color: #e5e9f0 !important;
+  }
+  .ep-component-top-element:is(.ep-dropdown, .ep-autocomplete-input) .k-floating-label { color: #8f9bb3 !important; }
+  .ep-component-top-element:is(.ep-dropdown, .ep-autocomplete-input) :is(.mdi, .k-svg-icon, .k-icon, kendo-svgicon) { color: #81a1c1 !important; fill: currentColor; }
+  .ep-component-top-element:is(.ep-dropdown, .ep-autocomplete-input):focus-within { box-shadow: inset 0 -2px 0 #88c0d0 !important; }
+  .ep-component-top-element:is(.ep-dropdown, .ep-autocomplete-input):focus-within .k-floating-label { color: #88c0d0 !important; }
+  /* On the dark slide-out panels, fields sit one step lighter */
+  .ep-sidebar .ep-component-top-element:is(.ep-dropdown, .ep-autocomplete-input, .ep-text-box) { background-color: #3b4252 !important; }
+
+  /* Dropdown lists: one rounded highlight per row, no boxes inside it */
+  .k-list-item-text { background: transparent !important; color: inherit !important; }
+  .k-list-item { border: 0 !important; box-shadow: none !important; outline: none !important; }
+  .k-list-item.k-selected, .k-list-item.k-selected:hover { background-color: rgba(136, 192, 208, .2) !important; color: #eceff4 !important; }
+  .k-list-item.k-focus:not(.k-selected) { background-color: rgba(76, 86, 106, .35) !important; }
+
+  /* Account panel: user card, avatar, log out */
+  .ep-shell-account-panel .ep-card { background-color: #3b4252 !important; border-radius: 8px !important; overflow: hidden; margin: 12px 0 10px !important; }
+  .ep-shell-account-panel .ep-card :is(.ep-card-header, .ep-user-details) { background: transparent !important; border: 0 !important; }
+  .ep-shell-account-panel .ep-user-details { display: flex !important; align-items: center !important; gap: 12px; padding: 10px 12px !important; }
+  .ep-shell-account-panel .ep-user-caption { height: auto !important; display: flex; flex-direction: column; justify-content: center; gap: 1px; min-width: 0; }
+  .ep-shell-account-panel .ep-profile-image-container { background: transparent !important; width: 48px !important; height: 48px !important; margin: 0 !important; display: flex !important; align-items: center; justify-content: center; flex: 0 0 48px; }
+  .ep-shell-account-panel .ep-profile-image-container .profile-image { width: 44px !important; height: 44px !important; margin: 0 !important; border-radius: 50% !important; background-color: #4c566a !important; box-shadow: 0 0 0 2px #434c5e; }
+  .ep-shell-account-panel .ep-shell-panel-footer .ep-button.ep-secondary { display: flex !important; justify-content: center !important; align-items: center; gap: 6px; padding: 0 20px !important; width: 268px !important; margin: 5px 0 5px 6px !important; }
+  .ep-shell-account-panel .ep-shell-panel-footer .ep-button.ep-secondary:hover { background-color: rgba(191, 97, 106, .22) !important; border-color: #bf616a !important; }
+
+  /* Dialogs: real padding, buttons inside the dialog, sized to content */
+  .k-dialog .k-dialog-content { padding: 14px 16px 8px !important; }
+  .k-dialog .k-dialog-button-group { margin: 6px 0 4px !important; padding: 0 !important; display: flex !important; justify-content: flex-end; gap: 8px; overflow: visible !important; }
+  .k-dialog .k-dialog-button-group .k-button { flex: 0 0 auto !important; min-width: 96px; width: auto !important; }
+  .k-dialog:has(erp-favorite-dialog) { height: auto !important; }
+  .k-dialog:has(erp-favorite-dialog) .k-dialog-content { overflow: visible !important; }
+  .ep-fav-edit-folder { display: flex !important; align-items: flex-start; gap: 8px; }
+  .ep-fav-edit-folder .ep-folder-name { flex: 1 1 auto; }
+  .ep-fav-edit-folder-icon { margin: 0 !important; height: 40px !important; width: 40px !important; display: flex !important; align-items: center; justify-content: center; border-radius: 6px; color: #81a1c1 !important; cursor: pointer; }
+  .ep-fav-edit-folder-icon:hover { background-color: #434c5e; color: #88c0d0 !important; }
+
+  /* ===== v7: focus boxes, popup rows, help panel, dialogs, field contrast, settings ===== */
+  /* Epicor draws square 1px focus borders/outlines with var(--focus) all over (tabs, menu rows, the ⋮ button); turn them off */
+  :root, body, body * { --focus: transparent !important; }
+  .k-button-solid-base:focus, .k-button-solid-base.k-focus { box-shadow: none !important; }
+  /* Popup menus: the first row gets keyboard focus on open; only real hover gets the highlight */
+  .k-menu-popup .k-menu-item.k-focus:not(:hover) > .k-menu-link, .k-menu-popup .k-menu-item.k-focus:not(:hover) { background: transparent !important; }
+
+  /* "No result found" sits in the same spot on every menu tab */
+  .ep-panel-link-search:has(> .ep-fav-no-results) { padding: 0 !important; margin: 0 !important; }
+  .ep-menu-panel-link:has(.ep-fav-no-results) { padding: 0 !important; }
+
+  /* Text inside tab panels (Epicor sets a near-black colour there) */
+  .k-tabstrip-content, .k-tabstrip > .k-content { color: #d8dee9 !important; }
+
+  /* Help panel, expanded view: right-hand padding, rounded hoverable support cards */
+  .ep-shell-panel-extension-content { padding-right: 18px !important; scrollbar-gutter: stable; }
+  .additional-helpsupport .link-wrap { display: block; margin: 0 0 8px !important; text-decoration: none !important; }
+  .additional-helpsupport .content-box { border: 1px solid #434c5e !important; border-radius: 8px !important; margin: 0 !important; padding: 8px 10px 8px 8px !important; background: transparent; transition: background-color .1s, border-color .1s; }
+  .additional-helpsupport .link-wrap:hover .content-box { background-color: #3b4252 !important; border-color: #4c566a !important; }
+  .additional-helpsupport .content-title { color: #e5e9f0 !important; }
+  .help-options .ep-check-box { margin-right: 0 !important; }
+
+  /* Help panel AI answer: readable text, fade to the panel colour instead of white */
+  .ep-help-panel-ai-answer { color: #d8dee9 !important; }
+  .ep-help-panel-ai-answer h5 { color: #8f9bb3 !important; }
+  .ep-help-panel-ai-answer-text, .ep-help-panel-ai-answer-text :is(p, li, ul, ol, span) { color: #d8dee9 !important; }
+  .ep-help-panel-ai-answer-text :is(strong, b) { color: #eceff4 !important; }
+  .ep-help-panel-ai-answer-text-faded-overlay { background: linear-gradient(rgba(46, 52, 64, 0) 30%, #2e3440 92%) !important; }
+  .ep-help-panel-answer-link, .ep-help-panel-answer-link * { color: #88c0d0 !important; }
+
+  /* Dialog action bar (System Info OK etc.) and primary buttons */
+  .k-dialog .k-dialog-actions, .k-window .k-window-actions.k-actions { display: flex !important; justify-content: flex-end !important; align-items: center; gap: 8px; padding: 10px 16px 14px !important; margin: 0 !important; border: 0 !important; background: transparent !important; }
+  .k-dialog .k-dialog-actions .k-button { padding: 6px 18px !important; min-width: 88px; height: 32px; line-height: 20px; flex: 0 0 auto !important; }
+  .k-button-solid-primary, .k-button-solid-primary .k-button-text { background-color: #88c0d0 !important; color: #2e3440 !important; border-color: #88c0d0 !important; font-weight: 600; }
+  .k-button-solid-primary:hover { background-color: #8fbcbb !important; border-color: #8fbcbb !important; }
+
+  /* Field contrast: fields are one step lighter than the page; inside cards/dialogs (already lighter) they go one step darker.
+     Read-only fields get a faint tint so they never vanish into the background. */
+  .ep-component-top-element:is(.ep-text-box, .ep-numeric-box, .ep-combo-box, .ep-date-picker, .ep-date-time-picker, .ep-time-picker, .ep-drop-down-list, .ep-dropdown-list, .ep-multi-select, .ep-text-area, .ep-currency-box, .ep-masked-text-box, .ep-dropdown, .ep-autocomplete-input) { background-color: #3b4252 !important; border-radius: 6px !important; }
+  :is(.ep-panel-card, .k-dialog, .k-window, .ep-card, .general-settings-panel) .ep-component-top-element:is(.ep-text-box, .ep-numeric-box, .ep-combo-box, .ep-date-picker, .ep-date-time-picker, .ep-time-picker, .ep-drop-down-list, .ep-dropdown-list, .ep-multi-select, .ep-text-area, .ep-currency-box, .ep-masked-text-box, .ep-dropdown, .ep-autocomplete-input) { background-color: #2e3440 !important; }
+  .ep-disabled > .ep-component-top-element:is(.ep-text-box, .ep-numeric-box, .ep-combo-box, .ep-date-picker, .ep-date-time-picker, .ep-time-picker, .ep-drop-down-list, .ep-dropdown-list, .ep-multi-select, .ep-text-area, .ep-currency-box, .ep-masked-text-box, .ep-dropdown, .ep-autocomplete-input), :is(.ep-panel-card, .k-dialog, .k-window, .ep-card) .ep-disabled > .ep-component-top-element:is(.ep-text-box, .ep-numeric-box, .ep-combo-box, .ep-date-picker, .ep-date-time-picker, .ep-time-picker, .ep-drop-down-list, .ep-dropdown-list, .ep-multi-select, .ep-text-area, .ep-currency-box, .ep-masked-text-box, .ep-dropdown, .ep-autocomplete-input) { background-color: rgba(67, 76, 94, .3) !important; }
+  .general-settings-panel .ep-disabled > .ep-component-top-element:is(.ep-text-box, .ep-numeric-box, .ep-combo-box, .ep-date-picker, .ep-date-time-picker, .ep-time-picker, .ep-drop-down-list, .ep-dropdown-list, .ep-multi-select, .ep-text-area, .ep-currency-box, .ep-masked-text-box, .ep-dropdown, .ep-autocomplete-input) { background-color: rgba(46, 52, 64, .45) !important; }
+
+  /* Settings > Preview Features */
+  .preview-feature-header { background: transparent !important; padding: 0 2px !important; }
+  .preview-feature-header .description { color: #8f9bb3 !important; padding-bottom: 12px !important; margin: 0 !important; }
+  .preview-feature-container .ep-single-list-item { background-color: #3b4252 !important; border: 0 !important; border-radius: 8px !important; padding: 10px 12px !important; margin: 0 0 8px !important; }
+  .preview-feature-container .ep-single-list-item:hover { background-color: #434c5e !important; }
+  .preview-feature-container .ep-flex-grow-Main { margin: 0 !important; }
+  .all-preview-features { background-color: #3b4252 !important; border-radius: 8px !important; padding: 8px 12px !important; margin: 12px 0 !important; display: flex !important; align-items: center; justify-content: space-between; }
+  .all-preview-features .all-features { margin: 0 !important; color: #e5e9f0 !important; font-weight: 600; }
+
+  /* Toggle switches */
+  .k-switch { background: transparent !important; border: 0 !important; }
+  .k-switch-off .k-switch-track { background-color: #2e3440 !important; border-color: #4c566a !important; }
+  .k-switch-off .k-switch-thumb { background-color: #a3adbf !important; border-color: #a3adbf !important; }
+  .k-switch-on .k-switch-track { background-color: #88c0d0 !important; border-color: #88c0d0 !important; }
+  .k-switch-on .k-switch-thumb { background-color: #2e3440 !important; border-color: #2e3440 !important; }
+
+  /* Account panel: company logo with equal space above and below */
+  .ep-shell-account-panel div.ep-logo { height: auto !important; margin: 16px 0 !important; display: flex !important; justify-content: center; }
+  .ep-shell-account-panel div.ep-logo .ep-logo-image { margin: 0 !important; display: block; }
+
+  /* External Integrations User Account: Nord card instead of the white-outlined box */
+  .general-settings-panel { background-color: #3b4252 !important; border: 0 !important; border-radius: 8px !important; padding: 14px 16px !important; }
+  /* Environment info chips (top right): 4px off the top edge, full height so text is not clipped */
+  .ep-information { top: 4px !important; }
+  .ep-indicator { padding-top: 0 !important; height: auto !important; align-items: center; }
+  .ep-indicator-text { height: 18px !important; line-height: 18px !important; overflow: visible !important; }
+  .general-settings-panel h3 { border-bottom: 1px solid rgba(76, 86, 106, .8) !important; color: #e5e9f0 !important; margin-bottom: 12px !important; }
+
+  /* ===== v7.2 ===== */
+  /* Dropdown list text (Epicor sets it to a dark token), no box on the keyboard-focused row */
+  .k-list-item, .k-list-item .k-list-item-text { color: #d8dee9 !important; }
+  .k-list-item.k-focus:not(.k-selected):not(:hover) { background-color: transparent !important; }
+  .k-list-item.k-disabled { color: #7b88a1 !important; }
+  /* Help Options: space between the two checkboxes */
+  .help-options .ep-check-box { margin: 4px 28px 4px 0 !important; }
+  /* Primary button hover (System Info OK): whole button changes, label never keeps its own box */
+  .k-dialog .k-dialog-actions .k-button-solid-primary .k-button-text, .k-button-solid-primary .k-button-text { background: transparent !important; }
+  .k-dialog .k-dialog-actions .k-button-solid-primary:hover, .k-window .k-actions .k-button-solid-primary:hover { background-color: #8fbcbb !important; border-color: #8fbcbb !important; color: #2e3440 !important; }
+  /* Settings > Global Settings: headings, checkboxes, buttons and dropdown on one left edge, full width */
+  .settings-content .content-header { margin: 16px 0 6px !important; padding: 0 !important; }
+  .settings-content .settings-context:first-child .content-header { margin-top: 4px !important; }
+  .settings-content .ep-check-box { padding-left: 0 !important; margin: 3px 0 !important; }
+  .settings-content .ep-button-wrapper .ep-button { margin: 2px 0 6px !important; width: 100% !important; }
+
+  /* ===== v7.3 ===== */
+  /* Grids: rounded; inside a card only the bottom corners (the card header sits on top) */
+  .k-grid { border-radius: 8px !important; overflow: hidden !important; }
+  .ep-panel-card { overflow: hidden !important; }
+  .ep-panel-card .k-grid { border-radius: 0 0 8px 8px !important; }
+  /* Multi-column dropdowns (New layout > Security code): header row and cell text without grey/blue blocks */
+  .ep-dropdown-columns .k-list-item.k-disabled { background: transparent !important; color: #8f9bb3 !important; opacity: 1 !important; border-bottom: 1px solid #4c566a !important; border-radius: 0 !important; font-weight: 600; }
+  .k-list-item .item-template span, .k-list-item .ep-item-grid span { background: transparent !important; color: inherit !important; }
+  /* File picker field (Import Layout) */
+  .ep-component-top-element.erp-file-box { display: flex !important; align-items: center; min-height: 40px; background-color: #3b4252 !important; border: 0 !important; border-radius: 6px !important; box-shadow: inset 0 -1px 0 #4c566a !important; }
+  .erp-file-box .erp-flex-box-container { flex: 1 1 auto; display: flex; align-items: center; min-width: 0; }
+  .erp-file-box .erp-file-box-label { margin: 0 12px !important; color: #8f9bb3 !important; }
+  .erp-file-box .erp-file-box-find { width: 30px !important; height: 30px !important; margin: 0 5px !important; padding: 0 !important; display: inline-flex !important; align-items: center; justify-content: center; background: transparent !important; border: 0 !important; border-radius: 6px !important; color: #81a1c1 !important; }
+  .erp-file-box .erp-file-box-find:hover { background-color: #434c5e !important; color: #88c0d0 !important; }
+  .erp-file-box .erp-file-box-find .mdi { margin: 0 !important; font-size: 18px; line-height: 1; color: inherit !important; }
+  /* Home page edit mode: Add Widget list hover */
+  .ep-widget-list-container .ep-widget { border-radius: 8px !important; transition: background-color .1s; }
+  .ep-widget-list-container .ep-widget:hover { background-color: #434c5e !important; }
+  .ep-widget-list-container .ep-widget > :first-child { border-radius: 6px; overflow: hidden; }
+  /* Edit Favorite Item: even 12px rhythm, folder button level with its dropdown */
+  .ep-fav-edit-dialog .input-group, .ep-fav-edit-dialog .form-group, .ep-fav-edit-dialog .ep-company, .ep-fav-edit-dialog .ep-current-company { margin: 0 !important; padding: 0 !important; height: auto !important; }
+  .ep-fav-edit-dialog .ep-component-top-element:is(.ep-text-box, .ep-dropdown) { margin: 0 0 12px !important; }
+  .ep-fav-edit-dialog .ep-fav-edit-folder { height: auto !important; align-items: flex-start !important; gap: 8px; margin: 0 !important; }
+  .ep-fav-edit-dialog .ep-fav-edit-folder-icon { position: static !important; top: auto !important; float: none !important; align-self: flex-start; padding: 0 !important; margin: 0 !important; height: 40px !important; width: 40px !important; }
+  .ep-fav-edit-dialog .ep-check-box { margin: 0 0 12px !important; padding: 2px 0 !important; }
+  /* Loading overlays: dim with the panel colour instead of white */
+  .ep-help-panel-spinner-overlay, [class*="spinner-overlay"] { background-color: rgba(46, 52, 64, .72) !important; }
+  .k-loading-mask .k-loading-color { background-color: #2e3440 !important; opacity: .72 !important; }
+  /* Help panel footer: slimmer so the expanded column shows more */
+  .ep-shell-help-panel .ep-shell-panel-footer { height: auto !important; min-height: 0 !important; }
+  .ep-shell-help-panel .ep-shell-panel-footer .ep-footer-container { height: auto !important; padding: 8px 15px !important; }
+  .ep-shell-help-panel .ep-shell-panel-footer .ep-button-wrapper { height: 34px !important; }
+  .ep-shell-help-panel .ep-shell-panel-footer .ep-button { height: 34px !important; margin: 0 !important; }
+  /* Settings / expanded panels: keep content clear of the scrollbar */
+  .ep-shell-panel-extension-content .k-tabstrip-content { padding-right: 12px !important; }
+  /* Confirmation dialog icon (Logout? etc.) */
+  .ep-dg-icon { border-radius: 8px !important; overflow: hidden; }
+
+  /* ===== v7.4 ===== */
+  /* Grid rows table: rounded bottom corners where the rows end (cards often extend below the last row) */
+  .k-grid .k-grid-content .k-grid-table { border-radius: 0 0 8px 8px !important; clip-path: inset(0 round 0 0 8px 8px); }
+  /* File picker button vertically centred */
+  .erp-file-box .erp-file-box-find { align-self: center !important; }
+  /* Slide-out panel footers (Import Layout, New layout, ...): buttons right-aligned, equal size, level with the fields above */
+  .ep-base-sliding-panel-footer .ep-shell-panel-footer { display: flex !important; justify-content: flex-end !important; align-items: center; gap: 8px; }
+  .ep-base-sliding-panel-footer .ep-base-sliding-panel-footer-button { flex: 0 0 auto !important; }
+  .ep-base-sliding-panel-footer .ep-button { margin: 0 !important; min-width: 104px; padding: 0 18px !important; }
+
+  /* ===== v7.5: login page ===== */
+  /* Background: Polar Night gradient with a soft blue glow behind the card (replaces the flat light-blue fill) */
+  .ep-login-background { background: radial-gradient(ellipse 70% 55% at 50% 38%, rgba(94, 129, 172, .22) 0%, rgba(94, 129, 172, 0) 70%), linear-gradient(180deg, #2e3440 0%, #262b35 100%) !important; }
+  .ep-radial-light { background: radial-gradient(circle at 50% 50%, rgba(136, 192, 208, .10) 0%, rgba(136, 192, 208, 0) 60%) !important; }
+  .ep-login-view .epicor-logo { width: 240px !important; height: auto !important; opacity: .95; filter: drop-shadow(0 2px 10px rgba(0, 0, 0, .35)); }
+  /* Card */
+  .ep-login-up-box .ep-card { background-color: #3b4252 !important; border: 1px solid #434c5e !important; border-radius: 12px !important; box-shadow: 0 18px 50px rgba(0, 0, 0, .38), 0 2px 6px rgba(0, 0, 0, .25) !important; overflow: hidden; }
+  .ep-login-up-box .ep-card-header { background: transparent !important; border: 0 !important; padding: 20px 24px 4px !important; }
+  .ep-login-up-box .ep-login-header, .ep-login-up-box .ep-card-header * { color: #eceff4 !important; font-size: 1.25rem !important; font-weight: 600 !important; letter-spacing: .01em; }
+  .ep-login-up-box .ep-card-body { padding: 14px 24px 24px !important; }
+  /* Fields: even spacing, rounded, frost focus */
+  .ep-login-up-box .ep-credentials { padding-bottom: 0 !important; }
+  .ep-login-up-box .ep-credentials .ep-component-top-element.ep-text-box { margin: 0 0 14px !important; }
+  .ep-login-up-box .ep-component-top-element.ep-text-box { background-color: #2e3440 !important; border-radius: 8px !important; }
+  .ep-login-up-box .ep-component-top-element.ep-text-box:focus-within { box-shadow: inset 0 -2px 0 #88c0d0, 0 0 0 1px rgba(136, 192, 208, .35) !important; }
+  .ep-login-up-box .k-floating-label { color: #8f9bb3 !important; }
+  /* Log in button: full width, frost primary */
+  .ep-login-up-box form .ep-margin-top-20 { margin-top: 10px !important; }
+  .ep-login-up-box .ep-button-wrapper, .ep-login-up-box ep-button { display: block; width: 100% !important; }
+  .ep-login-up-box button.ep-button.ep-primary { width: 100% !important; margin: 0 !important; height: 42px !important; background-color: #88c0d0 !important; border: 0 !important; border-radius: 8px !important; color: #2e3440 !important; font-weight: 600 !important; letter-spacing: .02em; transition: background-color .12s, transform .06s; }
+  .ep-login-up-box button.ep-button.ep-primary * { color: #2e3440 !important; }
+  .ep-login-up-box button.ep-button.ep-primary:hover { background-color: #8fbcbb !important; }
+  .ep-login-up-box button.ep-button.ep-primary:active { transform: translateY(1px); }
+  .ep-login-up-box button.ep-button.ep-primary:disabled { background-color: #4c566a !important; color: #a3adbf !important; }
+  /* "Reset application back to defaults" link */
+  .ep-login-view a.ep-color-white { color: #81a1c1 !important; text-decoration: none !important; font-size: .9rem; }
+  .ep-login-view a.ep-color-white:hover { color: #88c0d0 !important; text-decoration: underline !important; }
+
+  /* ===== v8.0: typeface ===== */
+  /* Inter (rsms/inter, installed locally by ~/bin/install-inter.ps1). Falls back to Windows 11's Segoe UI Variable.
+     cv05 = lowercase l with tail, cv08 = upper-case I with serifs (tells I / l / 1 apart in part numbers and codes),
+     ss03 = round quotes. Icon fonts and code are left alone. */
+  :root { --nord-font: "Inter Variable", "Inter Variable Text", "Inter", "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif; }
+  html body, html body :is(div, span, p, a, li, td, th, label, input, textarea, select, button, h1, h2, h3, h4, h5, h6, small, strong, b, em, legend, caption, option, kendo-label, .k-link, .k-input-inner, .k-floating-label):not(.mdi):not([class^="mdi-"]):not([class*=" mdi-"]):not([class*="ehp-icon"]):not(.k-icon):not(.k-font-icon):not(.material-icons):not(code):not(pre):not(kbd):not(samp) {
+    font-family: var(--nord-font) !important;
+    font-feature-settings: "cv05", "cv08", "ss03" !important;
+  }
+  html body { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; letter-spacing: -0.003em; }
+  /* Numbers line up in grids and number fields */
+  html body :is(td, input, .k-input-inner, .ep-numeric-box *, .ep-currency-box *, .ep-indicator-text) { font-variant-numeric: tabular-nums; }
+
+  /* ===== v8.1: wider slide-outs for Inter, dialog/shortcut alignment ===== */
+  /* Left slide-out panels: 340px (was 310), and 340 + 440px when a second column opens
+     (Settings, Help and support centre, menu flyout). Right-hand sliding panels keep Epicor's width. */
+  :root { --nord-panel-w: 340px; --nord-ext-w: 440px; }
+  ep-sidebar > .ep-sidebar.left { min-width: var(--nord-panel-w) !important; }  /* min-width (v8.11): keeps Epicor's own/dragged width */
+  ep-sidebar > .ep-sidebar.left:has(.ep-shell-panel-extended), ep-sidebar > .ep-sidebar.left[style*="620"] { min-width: calc(var(--nord-panel-w) + var(--nord-ext-w)) !important; }
+  .ep-sidebar.left .ep-shell-panel-extended > .ep-shell-panel-default-content { width: var(--nord-panel-w) !important; min-width: var(--nord-panel-w) !important; flex: 0 0 var(--nord-panel-w) !important; }
+  .ep-sidebar.left .ep-shell-panel-extension-content { flex: 1 1 auto !important; width: auto !important; min-width: 0 !important; }
+  .ep-sidebar.left .ep-shell-panel-extension-content > * { flex: 1 1 auto; width: 100% !important; min-width: 0; }
+  .ep-shell-menu-panel { width: 100% !important; }
+  .ep-shell-menu-panel-content { width: var(--nord-panel-w) !important; flex: 0 0 var(--nord-panel-w) !important; box-sizing: border-box; }
+  .ep-shell-menu-secondary-panel { width: auto !important; flex: 1 1 auto !important; min-width: 0 !important; }
+  /* Log Out button always as wide as the buttons above it */
+  .ep-shell-account-panel .ep-shell-panel-footer .ep-button.ep-secondary { width: calc(var(--nord-panel-w) - 43px) !important; }
+  /* Confirmation dialogs: message vertically centred on the icon */
+  .ep-dg-container { display: flex !important; align-items: center; gap: 15px; min-height: 40px; }
+  .ep-dg-container .ep-dg-icon { float: none !important; flex: 0 0 40px; display: flex !important; align-items: center; justify-content: center; }
+  .ep-dg-container .ep-dg-content { float: none !important; margin: 0 !important; flex: 1 1 auto; min-width: 0; }
+  /* Edit shortcuts: label takes the free space, key fields and "+" evenly spaced and centred */
+  .shortcut-div { align-items: center !important; gap: 8px; }
+  .shortcut-div .ep-component-top-element { margin: 0 !important; }
+  .shortcut-div .hotkey-plus { margin: 0 !important; align-self: center; color: #8f9bb3 !important; line-height: 1; }
+  .ep-hot-key-panel .ep-single-list-item { gap: 12px; }
+  .ep-hot-key-panel .ep-single-list-item .ep-list-items { flex: 1 1 auto; min-width: 0; }
+  .ep-hot-key-panel .shortcut-div { flex: 0 0 auto; }
+  /* "No result found" can't be text-selected (it stayed highlighted after searching Favorites) */
+  .ep-fav-no-results, .ep-shell-menu-panel .k-tabstrip-content div[class="ng-star-inserted"]:not(:has(*)) { user-select: none !important; -webkit-user-select: none !important; }
+  .ep-fav-no-results::selection { background: transparent !important; }
+
+  /* ===== v8.2: grids, filter row, Add Widget, file picker ===== */
+  /* Grid cells: link cells (e.g. Change layout names) vertically centred like plain text cells */
+  .ep-grid-cell { align-items: center !important; }
+  .ep-grid-cell > div:has(> ep-nav-link) { display: flex !important; align-items: center; height: 100%; min-width: 0; }
+  .ep-grid-cell ep-nav-link.ep-grid-cell-text { display: flex !important; align-items: center; height: auto !important; }
+  /* Row-selector column: no second background layer (made its boxes look offset from the row) */
+  .k-grid td.selectorCustomClass, .k-grid .selectorCustomClass { background: transparent !important; }
+  .k-grid-norecords, .k-grid-norecords-template { padding: 10px 12px !important; color: #8f9bb3 !important; font-style: italic; text-align: left; }
+  /* Card toolbar: the "filters on" icon stays visible so filters can be toggled back off */
+  .ep-action-buttons .mdi-filter { display: block !important; color: #88c0d0 !important; }
+  /* Grid filter row: text box | clear | operator, all 26px, centred, in normal flow (Epicor overlapped them with negative offsets) */
+  .k-filtercell, .k-filtercell-wrapper { display: flex !important; align-items: center !important; gap: 4px; }
+  .k-filtercell-wrapper > .k-textbox, .k-filtercell-wrapper > kendo-textbox { flex: 1 1 auto !important; min-width: 0 !important; width: auto !important; }
+  .k-filtercell .k-textbox, .k-filtercell .k-input { height: 26px !important; border-radius: 6px !important; background-color: #2e3440 !important; border: 1px solid #434c5e !important; box-shadow: none !important; align-items: center; }
+  .k-filtercell .k-input-inner { height: 24px !important; padding: 0 8px !important; background: transparent !important; }
+  .k-filtercell .k-filtercell-operator { display: flex !important; align-items: center; gap: 4px; margin: 0 !important; width: auto !important; flex: 0 0 auto; }
+  .k-filtercell .k-filtercell-operator > *, .k-filtercell .k-dropdown-operator { margin: 0 !important; }
+  .k-filtercell .k-filtercell-operator > .k-button { position: static !important; left: auto !important; right: auto !important; order: -1; }
+  .k-filtercell .k-dropdown-operator, .k-filtercell .k-filtercell-operator .k-button, .k-filtercell .k-clear-button-visible, .k-filtercell button[title*="lear"] { width: 26px !important; height: 26px !important; min-width: 26px !important; padding: 0 !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; border-radius: 6px !important; background-color: #3b4252 !important; border: 1px solid #434c5e !important; box-shadow: none !important; color: #81a1c1 !important; }
+  .k-filtercell .k-dropdown-operator { overflow: hidden; }
+  .k-filtercell .k-dropdown-operator .k-input-button { position: static !important; left: auto !important; width: 100% !important; height: 100% !important; padding: 0 !important; border: 0 !important; background: transparent !important; display: flex !important; align-items: center; justify-content: center; }
+  .k-filtercell .k-dropdown-operator .k-input-inner, .k-filtercell .k-dropdown-operator .k-input-value-text { display: none !important; }
+  .k-filtercell :is(.k-button, .k-dropdown-operator):hover { background-color: #434c5e !important; color: #88c0d0 !important; }
+  .k-filtercell .k-svg-icon, .k-filtercell .k-icon { margin: 0 !important; width: 16px; height: 16px; }
+  /* Add Widget panel: heading centred between the divider and the search box; every widget is an outlined card */
+  .ep-widget-header .ep-layout-actions { border-bottom: 1px solid #4c566a !important; margin-bottom: 14px !important; }
+  .ep-add-widget-title { margin: 0 0 14px !important; line-height: 24px !important; }
+  .ep-widget-header .ep-search-box { margin-bottom: 12px !important; }
+  .ep-widget-list-container .ep-widget { border: 1px solid #434c5e !important; border-radius: 8px !important; margin: 0 0 8px !important; padding: 8px !important; }
+  .ep-widget-list-container .ep-widget:hover { border-color: #4c566a !important; }
+  /* File picker: hide the "Select ..." prompt once a file is chosen */
+  .erp-flex-box-container:has(.erp-flex-box-scroller > *) .erp-file-box-label { display: none !important; }
+  .erp-file-box .erp-flex-box-scroller:has(> *) { flex: 1 1 auto; height: auto !important; display: flex; align-items: center; padding: 4px 8px; min-width: 0; overflow: hidden; }
+
+  /* ===== v8.3: home-page widget dialogs (App Link, BAQ Grid, Data Discovery, Grow Metric, Image, Text Label, Web App, Website) ===== */
+  /* One inset and one 12px rhythm: drop Bootstrap row/col gutters and Epicor's stacked margins */
+  .k-dialog .k-dialog-content { padding: 18px 20px 14px !important; }
+  .k-dialog .k-dialog-content .row { margin: 0 !important; }
+  .k-dialog .k-dialog-content .row > [class*="col-"] { padding: 0 !important; }
+  .k-dialog .k-dialog-content .ep-pad-all-15, .k-dialog .k-dialog-content .ep-pad-bottom-15 { padding: 0 !important; }
+  .k-dialog .k-dialog-content .input-group { margin: 0 0 12px !important; width: 100% !important; align-items: center; }
+  .k-dialog .k-dialog-content .input-group > :not(i) { flex: 1 1 auto; min-width: 0; }
+  .k-dialog .k-dialog-content :is(ep-combo-box, ep-text-box, ep-dropdown, ep-numeric-box, khp-color-dropdown) { display: block !important; width: 100% !important; }
+  .k-dialog .k-dialog-content .ep-component-top-element:is(.ep-text-box, .ep-dropdown, .ep-combo-box, .ep-numeric-box) { margin: 0 !important; width: 100% !important; }
+  .k-dialog .k-dialog-content .row:has(> [class*="col-"] > :is(ep-combo-box, ep-text-box, ep-dropdown, ep-numeric-box, khp-color-dropdown)) { margin-bottom: 12px !important; }
+  .k-dialog .k-dialog-content .row:has(> [class*="col-"] > ep-check-box) { margin-bottom: 8px !important; }
+  .k-dialog .k-dialog-content .row > [class*="col-"] > ep-check-box .ep-check-box, .k-dialog .k-dialog-content .input-group ep-check-box .ep-check-box { margin: 0 !important; padding: 4px 0 !important; }
+  .k-dialog .k-dialog-content .input-group:has(ep-check-box) { margin-bottom: 8px !important; }
+  /* Section labels (Display Style, Alignment, Display Columns) */
+  .k-dialog .k-dialog-content .row > [class*="col-"] > label, .k-dialog .k-dialog-content .khp-tile-grid-column-list-label, .k-dialog .k-dialog-content .khp-tile-grid-column-list-label * { color: #8f9bb3 !important; font-weight: 600; font-size: .92em; }
+  .k-dialog .k-dialog-content .row > [class*="col-"] > label { display: block; margin: 4px 0 8px !important; }
+  .k-dialog .k-dialog-content .khp-tile-grid-column-list-label { margin: 4px 0 8px !important; }
+  /* Radio groups: one evenly spaced line */
+  .k-dialog .k-dialog-content .ep-radio-button { display: flex !important; flex-wrap: wrap; gap: 8px 18px; height: auto !important; margin: 0 0 14px !important; }
+  .k-dialog .k-dialog-content .ep-radio-button-container { margin: 0 !important; align-items: center; }
+  .k-dialog .k-dialog-content .ep-radio-button-container .ep-item-label { margin-left: 8px !important; }
+  /* Refresh button beside the Data Discovery combo: a 40px square level with the field */
+  .khp-combo-refresh { display: flex !important; align-items: center !important; gap: 8px; width: 100%; }
+  .khp-combo-refresh > ep-combo-box { flex: 1 1 auto; min-width: 0; }
+  .khp-combo-refresh .mdi-refresh { flex: 0 0 40px; width: 40px !important; height: 40px !important; margin: 0 !important; padding: 0 !important; display: flex !important; align-items: center; justify-content: center; border-radius: 6px; background-color: #2e3440; color: #81a1c1 !important; font-size: 20px; cursor: pointer; transition: background-color .1s; }
+  .khp-combo-refresh .mdi-refresh:hover { background-color: #434c5e; color: #88c0d0 !important; }
+  /* BAQ display columns list */
+  .khp-tile-grid-checkbox-list { width: 100% !important; background-color: #2e3440 !important; border: 1px solid #434c5e !important; border-radius: 8px !important; padding: 10px 12px !important; }
+  /* Colour picker: a small rounded swatch under the label instead of a full-width bar */
+  .color-block .k-input-value-text { display: flex !important; align-items: flex-end; padding: 0 0 6px 4px !important; }
+  .color-block .tile-background { width: 44px !important; height: 12px !important; border-radius: 4px !important; }
+  .k-list-item .tile-background { width: 44px !important; height: 16px !important; border-radius: 4px !important; box-shadow: inset 0 0 0 1px rgba(236, 239, 244, .12); }
+  .k-list-item:has(.tile-background) { padding-top: 6px !important; padding-bottom: 6px !important; }
+  /* Image picker: buttons stacked on the left, a dark rounded drop area with a Nord placeholder icon on the right */
+  khp-image-picker > div > .row { display: flex !important; align-items: flex-start; gap: 16px; margin: 4px 0 12px !important; }
+  khp-image-picker .khp-button-column { flex: 0 0 auto !important; max-width: none !important; width: auto !important; display: flex !important; flex-direction: column; gap: 8px; }
+  khp-image-picker .khp-button-column .btn { width: 110px !important; height: 34px !important; margin: 0 !important; text-transform: none !important; font-weight: 500 !important; letter-spacing: 0; border-radius: 6px !important; }
+  khp-image-picker .khp-button-column .btn:hover { background-color: #4c566a !important; }
+  khp-image-picker .khp-image-column { flex: 1 1 auto !important; max-width: none !important; display: flex; justify-content: flex-end; }
+  khp-image-picker .khp-tile-image { width: 180px !important; height: 180px !important; object-fit: cover; border-radius: 8px !important; border: 1px dashed #4c566a !important; background-color: #2e3440; }
+  khp-image-picker .khp-tile-image[src*="Placeholder"] { object-position: -9999px 0; background: #2e3440 url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cpath%20fill%3D%27%234c566a%27%20d%3D%27M19%205v14H5V5h14m0-2H5a2%202%200%200%200-2%202v14a2%202%200%200%200%202%202h14a2%202%200%200%200%202-2V5a2%202%200%200%200-2-2zm-4.86%208.86-3%203.87L9%2013.14%206%2017h12l-3.86-5.14z%27%2F%3E%3Ccircle%20cx%3D%2716.5%27%20cy%3D%277.5%27%20r%3D%271.5%27%20fill%3D%27%2381a1c1%27%2F%3E%3C%2Fsvg%3E") center / 56px no-repeat; }
+  /* Cancel / Ok */
+  .k-dialog .k-dialog-content .dialog-buttons { padding: 4px 0 0 !important; }
+  .k-dialog .k-dialog-content ep-button.ep-align-hright .ep-button { margin: 8px 0 0 8px !important; height: 36px !important; min-width: 96px; padding: 0 22px !important; }
+
+  /* ===== v8.4: filter states, filter menu, small alignments ===== */
+  /* Confirmation dialog icon (e.g. Reset application on the login page) centred in its box */
+  .ep-dg-icon .mdi, .ep-dg-icon i { margin: 0 !important; line-height: 1 !important; display: block; }
+  /* Overflow menu icons vertically centred on their labels */
+  .ep-user-option-icon > div { display: flex !important; align-items: center; justify-content: center; height: 100%; }
+  .ep-user-option-icon i { line-height: 1 !important; display: block; }
+  /* File picker chip: no stray border; the remove "x" (its icon font is missing) drawn as a proper button */
+  .erp-file-box .erp-file-box-files { gap: 4px; }
+  .erp-file-box .erp-file-box-file { background-color: #434c5e !important; border: 0 !important; border-radius: 6px !important; padding: 4px 6px 4px 10px !important; align-items: center; gap: 8px; }
+  .erp-file-box .erp-file-box-file .erp-file-box-file-img { margin: 0 !important; color: #81a1c1 !important; }
+  .erp-file-box .erp-file-box-file .erp-file-box-file-name { color: #a3be8c !important; margin: 0 !important; flex: 1 1 auto; min-width: 0; }
+  .erp-file-box .erp-file-box-file-x { width: 22px; height: 22px; padding: 0 !important; margin: 0 !important; border: 0 !important; border-radius: 6px; background: transparent !important; display: inline-flex !important; align-items: center; justify-content: center; cursor: pointer; color: #81a1c1; }
+  .erp-file-box .erp-file-box-file-x .k-icon { display: none !important; }
+  .erp-file-box .erp-file-box-file-x::before { content: "\00d7"; font-size: 18px; line-height: 1; }
+  .erp-file-box .erp-file-box-file-x:hover { background-color: rgba(191, 97, 106, .25) !important; color: #bf616a; }
+  /* Grid header: the selector column had a 2px bottom border (others 1px) */
+  .k-grid thead th { border-bottom-width: 1px !important; }
+  /* Card toolbar icons: one 30px rounded button style; filter states (off / basic / advanced) share it, active ones tinted */
+  .ep-action-buttons .ep-user-action-button { width: 30px !important; height: 30px !important; display: flex !important; align-items: center; justify-content: center; border-radius: 6px; color: #81a1c1 !important; font-size: 20px !important; transition: background-color .1s; }
+  .ep-action-buttons .ep-user-action-button:hover { background-color: #434c5e; color: #88c0d0 !important; }
+  .ep-action-buttons .ep-user-action-button:is(.mdi-filter, .mdi-filter-cog) { display: flex !important; color: #88c0d0 !important; background-color: rgba(136, 192, 208, .16); }
+  /* Column-header filter button (advanced filters): rounded, centred, hover and active states */
+  .k-grid-header .k-grid-filter-menu, .k-grid-header .k-grid-header-menu { width: 26px !important; height: 26px !important; border-radius: 6px !important; display: flex !important; align-items: center; justify-content: center; align-self: center; color: #81a1c1 !important; transition: background-color .1s; }
+  .k-grid-header .k-grid-filter-menu:hover, .k-grid-header .k-grid-header-menu:hover { background-color: #434c5e !important; color: #88c0d0 !important; }
+  .k-grid-header .k-grid-filter-menu.k-active, .k-grid-header .k-grid-header-menu.k-active { background-color: rgba(136, 192, 208, .18) !important; color: #88c0d0 !important; }
+  .k-grid-header .k-cell-inner { align-items: center !important; }
+  /* Column filter menu (popup) */
+  .k-grid-filter-popup { padding: 0 !important; overflow: hidden; }
+  .k-grid-filter-popup .k-filter-menu-container { background: transparent !important; padding: 10px 12px 12px !important; gap: 8px; display: flex !important; flex-direction: column; }
+  .k-grid-filter-popup .advanceRowMenuHeader, .k-grid-filter-popup .columnName { display: flex !important; align-items: center; justify-content: space-between; height: auto !important; margin: 0 !important; }
+  .k-grid-filter-popup .columnName { flex: 1 1 auto !important; width: 100% !important; }
+  .k-grid-filter-popup .columnName .pull-left { font-weight: 600; color: #e5e9f0; float: none !important; }
+  .k-grid-filter-popup .columnName .pull-right { float: none !important; height: auto !important; }
+  .k-grid-filter-popup .columnName .mdi { width: 28px; height: 28px; display: flex !important; align-items: center; justify-content: center; border-radius: 6px; color: #81a1c1 !important; cursor: pointer; transition: background-color .1s; }
+  .k-grid-filter-popup .columnName .mdi:hover { background-color: #434c5e; color: #88c0d0 !important; }
+  .k-grid-filter-popup .k-filtercell, .k-grid-filter-popup .ep-grid-string-rowMenu-filter-wrapper, .k-grid-filter-popup .singleMenu, .k-grid-filter-popup .multiMenu, .k-grid-filter-popup .inputContainers, .k-grid-filter-popup .wrap { display: flex !important; flex-direction: column; align-items: stretch !important; gap: 8px; width: 100%; }
+  .k-grid-filter-popup ep-dropdown, .k-grid-filter-popup ep-text-box, .k-grid-filter-popup ep-combo-box { display: block !important; width: 100%; }
+  .k-grid-filter-popup .ep-component-top-element:is(.ep-dropdown, .ep-text-box, .ep-combo-box) { margin: 0 !important; background-color: #2e3440 !important; border-radius: 6px !important; }
+  .k-grid-filter-popup .ep-component-top-element.ep-dropdown { height: 34px !important; }
+  .k-grid-filter-popup .ep-component-top-element.ep-dropdown kendo-dropdownlist { height: 34px !important; align-items: center; }
+  .k-grid-filter-popup :is([class*="InputFields"], .inputFields) { display: flex !important; align-items: center; gap: 8px; height: auto !important; width: 100% !important; }
+  .k-grid-filter-popup :is([class*="InputFields"], .inputFields) > :is(ep-text-box, ep-combo-box, ep-dropdown) { flex: 1 1 auto; min-width: 0; }
+  .k-grid-filter-popup :is([class*="InputFields"], .inputFields) .ep-component-top-element { height: 40px !important; }
+  .k-grid-filter-popup :is([class*="InputFields"], .inputFields) .ep-component-top-element :is(input.k-input, .k-input-inner, kendo-combobox, kendo-dropdownlist) { height: 40px !important; }
+  .k-grid-filter-popup ep-button .ep-button-wrapper { height: auto !important; }
+  .k-grid-filter-popup :is([class*="InputFields"], .inputFields, .filter-pull-right, .ep-operator-container) > ep-button .ep-button { width: 34px !important; height: 34px !important; margin: 0 !important; padding: 0 !important; display: inline-flex !important; align-items: center; justify-content: center; border-radius: 6px !important; }
+  .k-grid-filter-popup .ep-add-delete-container, .k-grid-filter-popup .ep-operator-container { display: flex !important; align-items: center; gap: 8px; padding: 0 !important; width: 100% !important; }
+  .k-grid-filter-popup :is(.ep-add-delete-container, .ep-operator-container) > ep-dropdown { flex: 1 1 auto; min-width: 0; }
+  .k-grid-filter-popup .filter-pull-right { height: auto !important; }
+  .k-grid-filter-popup .control-container { padding: 10px !important; margin: 0 !important; border: 1px solid #434c5e !important; border-radius: 8px !important; background-color: rgba(46, 52, 64, .35) !important; display: flex !important; flex-direction: column; gap: 8px; }
+  .k-grid-filter-popup .delete-pull-right:empty { display: none !important; }
+  .k-grid-filter-popup .delete-pull-right .ep-button { width: 30px !important; height: 30px !important; margin: 0 !important; padding: 0 !important; display: inline-flex !important; align-items: center; justify-content: center; border-radius: 6px !important; background: transparent !important; color: #81a1c1 !important; }
+  .k-grid-filter-popup .delete-pull-right .ep-button:hover { background-color: rgba(191, 97, 106, .22) !important; color: #bf616a !important; }
+  .k-grid-filter-popup .wrapper { background: transparent !important; display: flex !important; justify-content: space-between; align-items: center; margin-top: 4px; }
+  .k-grid-filter-popup .wrapper .ep-button { height: 30px !important; margin: 0 !important; padding: 0 12px !important; display: inline-flex !important; align-items: center; gap: 6px; border-radius: 6px !important; }
+  .k-grid-filter-popup .wrapper .ep-button .mdi { color: #81a1c1; }
+  .k-grid-filter-popup .wrapper ep-button:last-child .ep-button { background-color: #88c0d0 !important; color: #2e3440 !important; font-weight: 600; padding: 0 18px !important; }
+  .k-grid-filter-popup .wrapper ep-button:last-child .ep-button * { color: #2e3440 !important; }
+  .k-grid-filter-popup .wrapper ep-button:last-child .ep-button:hover { background-color: #8fbcbb !important; }
+
+  /* ===== v8.5 ===== */
+  /* Dialog icon: Epicor nudges it with top + translateY, which pushed it 4px low inside the flex box */
+  .ep-dg-icon .mdi, .ep-dg-icon i { position: static !important; top: auto !important; transform: none !important; }
+  /* Secondary dialog buttons (No, Cancel): keep the button box on hover (Epicor removed the background and faded it) */
+  .k-dialog .k-dialog-actions .k-button:not(.k-button-solid-primary):hover, .k-dialog .k-dialog-actions .k-button:not(.k-button-solid-primary):active { background-color: #4c566a !important; color: #eceff4 !important; opacity: 1 !important; }
+  .k-dialog .k-dialog-actions .k-button:hover, .k-dialog .k-dialog-actions .k-button:active { opacity: 1 !important; }
+
+  /* ===== v8.6 — file chip X, dialog form rhythm, alerts, previews, spinners, filter row, grid edges ===== */
+  /* File chip: masked X glyph, optically centred */
+  .erp-file-box .erp-file-box-file-x::before { content: "" !important; width: 12px; height: 12px; background-color: currentColor; -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2024%2024'%3E%3Cpath%20d%3D'M6%206l12%2012M18%206L6%2018'%20stroke%3D'black'%20stroke-width%3D'2.4'%20stroke-linecap%3D'round'%2F%3E%3C%2Fsvg%3E") center / contain no-repeat; mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2024%2024'%3E%3Cpath%20d%3D'M6%206l12%2012M18%206L6%2018'%20stroke%3D'black'%20stroke-width%3D'2.4'%20stroke-linecap%3D'round'%2F%3E%3C%2Fsvg%3E") center / contain no-repeat; }
+  /* Widget dialogs: one consistent vertical rhythm between fields */
+  .k-dialog .k-dialog-content .input-group, .k-dialog .k-dialog-content .row, .k-dialog .k-dialog-content .row:has(> [class*="col-"] > :is(ep-combo-box, ep-text-box, ep-dropdown, ep-numeric-box, khp-color-dropdown)), .k-dialog .k-dialog-content .row:has(> [class*="col-"] > ep-check-box), .k-dialog .k-dialog-content .input-group:has(ep-check-box) { margin: 0 !important; }
+  .k-dialog .k-dialog-content :is(ep-text-box, ep-combo-box, ep-dropdown, ep-numeric-box, ep-text-area, khp-color-dropdown, .khp-combo-refresh) { margin-bottom: 12px !important; }
+  .k-dialog .k-dialog-content .khp-combo-refresh ep-combo-box { margin-bottom: 0 !important; }
+  .k-dialog .k-dialog-content ep-check-box { display: block !important; margin-bottom: 6px !important; }
+  .k-dialog .k-dialog-content ep-check-box .ep-check-box { margin: 0 !important; padding: 3px 0 !important; }
+  .k-dialog .k-dialog-content :is(ep-check-box) + :not(ep-check-box), .k-dialog .k-dialog-content .ep-pad-all-15:has(ep-check-box) + .ep-pad-all-15:not(:has(ep-check-box)) { margin-top: 8px; }
+  /* Radio groups (Full size / Widget): drop empty label slot, align on one row */
+  .k-dialog .k-dialog-content .ep-radio-button > .ep-label-container { display: none !important; }
+  .k-dialog .k-dialog-content .ep-radio-button { margin: 0 0 14px !important; gap: 8px 16px !important; }
+  /* Alerts: Nord tinted bars */
+  .k-dialog .k-dialog-content :is(.alert-info, .alert-wrap, .alert-warning) { display: block; margin: -4px 0 12px !important; padding: 6px 10px !important; border: 0 !important; border-radius: 6px !important; font-size: .9em; line-height: 1.4; word-break: break-all; background-color: rgba(136, 192, 208, .10) !important; color: #88c0d0 !important; }
+  .k-dialog .k-dialog-content .alert-warning { background-color: rgba(235, 203, 139, .14) !important; color: #ebcb8b !important; word-break: normal; }
+  .k-dialog .k-dialog-content :is(.alert-danger, .errorMessage) { display: block; margin: 0 0 12px !important; padding: 6px 10px !important; border: 0 !important; border-radius: 6px !important; background-color: rgba(191, 97, 106, .16) !important; color: #e5a1a8 !important; }
+  .k-dialog .k-dialog-content .error { color: #bf616a !important; font-size: .9em; }
+  /* Discovery / embedded previews: rounded frame */
+  .khp-edd-sample-1x1 { padding: 0 !important; margin: 4px 0 12px !important; border-radius: 8px !important; overflow: hidden; border: 1px solid #434c5e; }
+  .khp-edd-sample-1x1 .khp-embedded-website { border: 0 !important; border-radius: 8px; display: block; }
+  /* Add an image: Cancel/OK match preview width */
+  .k-dialog:has(khp-image-picker) ep-button.ep-align-hright .ep-button { width: 86px !important; min-width: 0 !important; padding: 0 !important; justify-content: center; }
+  /* Long values show their start when not focused */
+  .k-input-inner { text-overflow: ellipsis; }
+  /* Numeric spinners: rounded hover targets */
+  :is(.k-spinner-increase, .k-spinner-decrease, .k-input-spinner .k-button) { border-radius: 6px !important; width: 26px !important; height: 26px !important; display: inline-flex !important; align-items: center; justify-content: center; padding: 0 !important; margin: 0 1px !important; transition: background-color .1s; }
+  :is(.k-spinner-increase, .k-spinner-decrease, .k-input-spinner .k-button):hover { background-color: #434c5e !important; color: #88c0d0 !important; }
+  .k-input-spinner { display: flex !important; align-items: center; gap: 2px; padding-right: 6px; background: transparent !important; border: 0 !important; }
+  /* Grid toolbar filter toggle: no shift when toggled */
+  .ep-action-buttons .ep-user-action-button.ep-user-action-button { padding: 0 !important; line-height: 1 !important; }
+  /* Filter row operator button: centred icon, 6px radius */
+  .k-filter-row .k-filtercell .k-dropdown-operator.k-picker, .k-filter-row .k-filtercell .k-dropdown-operator.k-picker.k-rounded-md { border-radius: 6px !important; position: relative !important; box-sizing: border-box !important; }
+  .k-filter-row .k-filtercell .k-dropdown-operator .k-input-button { position: absolute !important; inset: 0 !important; width: auto !important; height: auto !important; margin: 0 !important; border-radius: 6px !important; }
+  .k-filter-row .k-filtercell .k-dropdown-operator .k-svg-icon, .k-filter-row .k-filtercell .k-button .k-svg-icon { width: 16px !important; height: 16px !important; margin: 0 !important; }
+  .k-filter-row .k-filtercell .k-button { border-radius: 6px !important; }
+  /* Grid header hover: full-height rounded cell */
+  .k-grid .k-link:hover, .k-panelbar .k-grid .k-link:hover { background: transparent !important; }
+  .k-grid-header th.k-header { transition: background-color .1s; }
+  .k-grid-header th.k-header:hover { background-color: #3b4252 !important; border-radius: 6px; }
+  /* Grid outline: one continuous border on the rounded container */
+  .k-grid { border: 1px solid #434c5e !important; }
+  .ep-panel-card .k-grid { border: 0 !important; }
+  .k-grid .k-grid-aria-root { border: 0 !important; }
+  .k-grid .k-grid-header { border-top: 0 !important; }
+  .k-grid .k-grid-content .k-grid-table { border-bottom: 0 !important; }
+  .k-grid tbody tr:last-child td { border-bottom: 0 !important; }
+
+
+  /* ===== v8.6.1 — password mask: smaller, evenly spaced dots (Inter's ● renders oversized) ===== */
+  input[type="password"] { font-size: 11px !important; letter-spacing: .25em !important; line-height: normal !important; }
+  input[type="password"]::placeholder { font-size: 14px; letter-spacing: normal; }
+
+
+  /* ===== v8.6.2 — environment chips: right edge aligned with the page overflow (⋮) button ===== */
+  .ep-information { right: 27px !important; }
+
+
+  /* ===== v8.7 — widget dialog spacing, spinner hover, discovery card preview, alert text ===== */
+  /* Color dropdown: inner ep-dropdown was adding a second 12px gap below it */
+  .k-dialog .k-dialog-content khp-color-dropdown ep-dropdown.ep-component.ep-component { margin-bottom: 0 !important; }
+  /* Last checkbox to next field: same 12px as field-to-field */
+  .k-dialog .k-dialog-content .row:has(ep-check-box) + .row:not(:has(ep-check-box)) { padding-top: 6px !important; }
+  /* Discovery card preview: iframe fills its rounded frame (no empty strip on the right) */
+  .khp-edd-sample-1x1 .khp-embedded-website { width: 100% !important; height: 100% !important; }
+  /* Numeric spinners: drop Kendo's overlay so only one hover box shows */
+  :is(.k-spinner-increase, .k-spinner-decrease, .k-input-spinner .k-button)::before, :is(.k-spinner-increase, .k-spinner-decrease, .k-input-spinner .k-button)::after { display: none !important; }
+  /* Alerts: padding wins over Epicor's col-md-12 reset, so text sits centred in the bar */
+  .k-dialog .k-dialog-content .alert.alert-warning.alert-warning, .k-dialog .k-dialog-content .alert-info.alert-info.alert-info, .k-dialog .k-dialog-content .alert-wrap.alert-wrap.alert-wrap, .k-dialog .k-dialog-content .alert-danger.alert-danger.alert-danger { padding: 6px 10px !important; line-height: 1.4 !important; width: 100% !important; max-width: none !important; flex: none !important; box-sizing: border-box !important; }
+  .k-dialog .k-dialog-content .alert-warning > .fa-warning:empty { display: none !important; }
+
+
+  /* ===== v8.8 — grid card outline, column filter popup polish, spinner icon hover ===== */
+  /* Grid cards: outline so the bottom edge shows even when the grid is empty */
+  .ep-panel-card:has(.k-grid) { border: 1px solid #434c5e !important; overflow: hidden !important; }
+  /* Column filter popup: dropdown chevrons centred (Epicor pushed them 12px down) */
+  .k-grid-filter-popup kendo-dropdownlist .k-input-button { position: static !important; top: auto !important; right: auto !important; align-self: stretch !important; height: auto !important; width: 30px !important; min-width: 30px !important; margin: 0 2px 0 0 !important; padding: 0 !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; background: transparent !important; border: 0 !important; }
+  .k-grid-filter-popup kendo-dropdownlist .k-input-button :is(.k-svg-icon, kendo-svgicon) { width: 16px !important; height: 16px !important; margin: 0 !important; position: static !important; }
+  .k-grid-filter-popup kendo-dropdownlist .k-input-button svg { width: 16px !important; height: 16px !important; }
+  /* Clear Filters: proper button padding, label sized under the Filter button */
+  .k-grid-filter-popup .wrapper .ep-button-wrapper .ep-button.ep-secondary:has(.mdi-filter-off) { height: 30px !important; padding: 0 12px 0 10px !important; border-radius: 6px !important; }
+  .k-grid-filter-popup .wrapper .ep-button-wrapper .ep-button.ep-secondary:has(.mdi-filter-off) .ep-button-content { font-size: 13px !important; gap: 6px; display: inline-flex !important; align-items: center; height: auto !important; }
+  .k-grid-filter-popup .wrapper .ep-button-wrapper .ep-button.ep-secondary:has(.mdi-filter-off) .mdi-filter-off { font-size: 15px !important; width: 15px !important; height: 15px !important; line-height: 15px !important; display: inline-flex; align-items: center; justify-content: center; }
+  /* Select Column field: floating label above the value instead of overlapping it */
+  .k-grid-filter-popup :is([class*="InputFields"], .inputFields) .ep-dropdown kendo-floatinglabel { display: block !important; position: relative !important; height: 40px !important; }
+  .k-grid-filter-popup :is([class*="InputFields"], .inputFields) .ep-dropdown kendo-dropdownlist { transform: none !important; padding: 0 !important; height: 40px !important; display: flex !important; align-items: stretch !important; }
+  .k-grid-filter-popup :is([class*="InputFields"], .inputFields) .ep-dropdown .k-input-inner { transform: none !important; top: 0 !important; height: 40px !important; padding: 0 !important; display: flex !important; align-items: flex-end !important; }
+  .k-grid-filter-popup :is([class*="InputFields"], .inputFields) .ep-dropdown .k-input-value-text { transform: none !important; padding: 0 10px 5px !important; height: auto !important; line-height: 1.3 !important; font-size: 14px !important; }
+  .k-grid-filter-popup :is([class*="InputFields"], .inputFields) .ep-dropdown .k-input-button { transform: none !important; align-self: center !important; }
+  .k-grid-filter-popup :is([class*="InputFields"], .inputFields) .ep-dropdown .k-floating-label { position: absolute !important; top: 4px !important; left: 10px !important; transform: none !important; font-size: 11px !important; line-height: 1.3 !important; pointer-events: none; color: #8f9bb3 !important; }
+  .k-grid-filter-popup :is([class*="InputFields"], .inputFields) .ep-dropdown .k-empty .k-floating-label, .k-grid-filter-popup :is([class*="InputFields"], .inputFields) .ep-dropdown kendo-floatinglabel.k-empty > .k-floating-label { top: 50% !important; transform: translateY(-50%) !important; font-size: 14px !important; }
+  /* Delete criteria: in line with its operator dropdown, icon centred */
+  .k-grid-filter-popup .delete-pull-right { margin: 0 !important; display: flex !important; align-items: center !important; flex: 0 0 auto; }
+  .k-grid-filter-popup .delete-pull-right .ep-button { width: 34px !important; height: 34px !important; padding: 0 !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; border-radius: 6px !important; }
+  .k-grid-filter-popup .delete-pull-right .ep-button-content { display: flex !important; align-items: center; justify-content: center; width: 100%; height: 100%; }
+  .k-grid-filter-popup .delete-pull-right .mdi-delete-forever { width: auto !important; height: auto !important; font-size: 18px !important; line-height: 1 !important; display: flex !important; }
+  /* Criteria list: keep the scrollbar clear of the criteria cards */
+  .k-grid-filter-popup .inputContainers { padding-right: 8px !important; scrollbar-width: thin; scrollbar-gutter: stable; }
+  /* Spinner arrows: icon had its own hover fill inside the button's */
+  :is(.k-spinner-increase, .k-spinner-decrease, .k-input-spinner .k-button) :is(kendo-svgicon, .k-svg-icon, .k-icon, .k-button-icon) { background: transparent !important; box-shadow: none !important; border: 0 !important; }
+
+
+  /* ===== v8.9 — Layout Management width, header hover, filter popup alignment ===== */
+  /* Layout Management slide-out: wider */
+  .ep-sidebar.right:has(> khp-layout-manager-panel) { width: 640px !important; max-width: calc(100vw - 80px) !important; }
+  /* Grid header hover: rounded fill drawn inside the cell so the bottom border stays continuous */
+  .k-grid-header th.k-header:hover { background-color: transparent !important; border-radius: 0 !important; }
+  .k-grid-header th.k-header::before { content: ""; position: absolute; inset: 0 1px; border-radius: 6px; background-color: #3b4252; opacity: 0; transition: opacity .1s; pointer-events: none; z-index: 0; }
+  .k-grid-header th.k-header:hover::before { opacity: 1; }
+  .k-grid-header th.k-header > .k-cell-inner { position: relative; z-index: 1; }
+  /* Value/column toggle: vertically centred against the 40px field */
+  .k-grid-filter-popup :is([class*="InputFields"], .inputFields) > ep-button { display: flex !important; align-items: center !important; height: 40px !important; flex: 0 0 auto; }
+  .k-grid-filter-popup :is([class*="InputFields"], .inputFields) .ep-component-top-element.ep-button-wrapper { height: 40px !important; display: flex !important; align-items: center !important; }
+  /* Select Column label: same inset as Input Value */
+  .k-grid-filter-popup :is([class*="InputFields"], .inputFields) .ep-dropdown .k-floating-label { left: 0 !important; }
+  /* Dropdown chevrons: 26px rounded hover target, centred, inset from the edge */
+  .k-grid-filter-popup kendo-dropdownlist .k-input-button.k-input-button { align-self: center !important; width: 26px !important; min-width: 26px !important; height: 26px !important; margin: 0 5px 0 0 !important; border-radius: 6px !important; background: transparent !important; transition: background-color .1s; }
+  .k-grid-filter-popup kendo-dropdownlist .k-input-button.k-input-button::before, .k-grid-filter-popup kendo-dropdownlist .k-input-button.k-input-button::after { display: none !important; }
+  .k-grid-filter-popup kendo-dropdownlist:hover .k-input-button.k-input-button, .k-grid-filter-popup kendo-dropdownlist .k-input-button.k-input-button:hover { background-color: #434c5e !important; }
+  .k-grid-filter-popup kendo-dropdownlist .k-input-button :is(kendo-svgicon, .k-svg-icon) { background: transparent !important; }
+  /* Delete criteria: Epicor disables it (no hover) when only two criteria remain; show that state */
+  .k-grid-filter-popup .delete-pull-right ep-button.ep-disabled .ep-button { opacity: .4 !important; cursor: not-allowed !important; }
+
+
+  /* ===== v8.10 — header line, list scrollbar, card action buttons, filter popup header + delete hover ===== */
+  /* Grid header: the column-title link carried its own short underline that stopped before the filter icon */
+  .k-grid-header .k-link, .k-grid-header th .k-link { border-bottom: 0 !important; }
+  /* Dropdown lists: keep options clear of the (overlay) scrollbar */
+  .k-popup .k-list-content { padding-right: 8px !important; scrollbar-width: thin; }
+  /* Card header actions: overflow (⋮) button same 30px box as the filter/tree buttons, same baseline */
+  .ep-action-dropdown kendo-dropdownbutton { width: 30px !important; height: 30px !important; display: flex !important; }
+  .ep-action-dropdown .k-menu-button.k-menu-button { width: 30px !important; height: 30px !important; min-width: 30px !important; padding: 0 !important; border-radius: 6px !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; }
+  .ep-action-dropdown .k-menu-button .ep-dropdown-icon { width: auto !important; height: auto !important; line-height: 1 !important; font-size: 20px !important; display: flex !important; align-items: center; justify-content: center; margin: 0 !important; }
+  .ep-action-primary-icon-container { align-items: center !important; }
+  .ep-action-primary-icon-container > .ep-action-buttons { margin-top: 0 !important; margin-bottom: 0 !important; }
+  .ep-panelcard-header-buttons .ep-action-dropdown { top: 0 !important; }
+  /* Filter popup header: space between the add-criteria icon and the divider */
+  .k-grid-filter-popup .advanceRowMenuHeader { padding-bottom: 6px !important; }
+  /* Delete criteria: hover also keyed off the host element (Firefox routes hover there) */
+  .k-grid-filter-popup .delete-pull-right ep-button:not(.ep-disabled):hover .ep-button, .k-grid-filter-popup .delete-pull-right ep-button:not(.ep-disabled) .ep-button:hover { background-color: rgba(191, 97, 106, .22) !important; color: #bf616a !important; }
+  .k-grid-filter-popup .delete-pull-right ep-button:not(.ep-disabled) .ep-button { cursor: pointer; transition: background-color .1s, color .1s; }
+
+
+  /* ===== v8.11 — slide-out resizing restored, help panel scroll, menu search filter button, favorites no-result ===== */
+  /* (v8.1 slide-out widths are now minimums, so System Monitor opens at Epicor's width and panels drag wider again) */
+  /* Help panel: right column grows with its content so the About card scrolls fully into view */
+  .ep-shell-panel-extension-content .help-extension { align-self: flex-start !important; height: auto !important; max-height: none !important; padding-bottom: 16px !important; }
+  /* Menu search: filter button spaced 8px from the field and the same 40px height (only where that button exists — v8.11.1) */
+  .ep-panel-search:has(> ep-dropdown-button) { display: flex !important; align-items: flex-start !important; gap: 8px !important; }
+  .ep-panel-search:has(> ep-dropdown-button) > ep-search-box { flex: 1 1 auto !important; min-width: 0 !important; width: auto !important; }
+  .ep-panel-search:has(> ep-dropdown-button) > ep-dropdown-button { flex: 0 0 40px !important; width: 40px !important; height: 40px !important; margin: 0 !important; display: block !important; }
+  .ep-panel-search:has(> ep-dropdown-button) > ep-dropdown-button .ep-dropdown-button, .ep-panel-search:has(> ep-dropdown-button) > ep-dropdown-button kendo-dropdownbutton { width: 40px !important; height: 40px !important; margin: 0 !important; top: 0 !important; display: flex !important; }
+  .ep-panel-search:has(> ep-dropdown-button) > ep-dropdown-button .k-menu-button { width: 40px !important; height: 40px !important; min-width: 40px !important; padding: 0 !important; margin: 0 !important; border-radius: 6px !important; background-color: #3b4252 !important; border: 0 !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; color: #81a1c1 !important; transition: background-color .1s; }
+  .ep-panel-search:has(> ep-dropdown-button) > ep-dropdown-button .k-menu-button:hover { background-color: #434c5e !important; color: #88c0d0 !important; }
+  .ep-panel-search:has(> ep-dropdown-button) > ep-dropdown-button .k-menu-button :is(.k-button-icon, .mdi, kendo-svgicon) { margin: 0 !important; line-height: 1 !important; font-size: 20px !important; display: flex !important; align-items: center; justify-content: center; }
+  /* Favorites "No result found": never highlighted, focused or selectable */
+  .ep-menu-panel-link .ep-panel-link-search.ep-panel-link-search:has(> .ep-fav-no-results), .ep-menu-panel-link .ep-panel-link-search.ep-panel-link-search:has(> .ep-fav-no-results):hover, .ep-menu-panel-link .ep-panel-link-search.ep-panel-link-search.active:has(> .ep-fav-no-results) { background: transparent !important; box-shadow: none !important; cursor: default !important; }
+  .ep-menu-panel-link:has(.ep-fav-no-results) { pointer-events: none !important; background: transparent !important; box-shadow: none !important; outline: 0 !important; }
+  .ep-fav-no-results, .ep-fav-no-results * { user-select: none !important; -moz-user-select: none !important; }
+  .ep-fav-no-results::selection, .ep-fav-no-results *::selection { background: transparent !important; }
+
+
+  /* ===== v8.11.1 — help footer divider only when the help centre column is open ===== */
+  .ep-sidebar.left:not(:has(.ep-shell-panel-extended)) .ep-shell-help-panel .ep-footer-container { border-right-color: transparent !important; }
+
+
+  /* ===== v8.11.2 — search slide-out grid toggle on the heading row, help search width ===== */
+  .ep-panel-search > .khp-grid-toggle { height: 0 !important; min-height: 0 !important; margin: 0 !important; overflow: visible !important; position: relative; z-index: 2; }
+  .ep-panel-search > .khp-grid-toggle .mdi-grid { display: block !important; width: 24px; height: 24px; line-height: 24px !important; position: absolute !important; right: 0; top: -2.5px; }
+  /* Help centre open: search field ends where the Help and support center button ends */
+  .ep-sidebar.left:has(.ep-shell-panel-extended) .ep-panel-search > ep-autocomplete-input { display: block; max-width: calc(var(--nord-panel-w) - 31px) !important; }
+
+
+  /* ===== v8.12 — app entry pages (Project Entry and other tree-nav forms), breadcrumb record selector ===== */
+  /* Fields inside form card bodies (dark body) go one step lighter so they stand off the background */
+  .ep-panel-card-body .ep-content :not(.ep-disabled) > .ep-component-top-element:is(.ep-text-box, .ep-numeric-box, .ep-combo-box, .ep-date-picker, .ep-date-time-picker, .ep-time-picker, .ep-drop-down-list, .ep-dropdown-list, .ep-multi-select, .ep-text-area, .ep-currency-box, .ep-masked-text-box, .ep-dropdown, .ep-autocomplete-input) { background-color: #3b4252 !important; }
+  /* Breadcrumb bar: no dark strip behind it */
+  .ep-crumb-bar-nav nav { background: transparent !important; }
+  /* Dropdown values start on the same line/inset as their floating label (matches text boxes) */
+  .ep-component-top-element.ep-dropdown kendo-floatinglabel .k-input-value-text { transform: translate(4px, 1px) !important; }
+  /* Form buttons (e.g. Create Quote) flush with the fields in their column */
+  ep-factory-control erp-button .ep-button-wrapper > .ep-button { margin-left: 0 !important; margin-right: 0 !important; }
+  /* Empty grids: "No records available." inset from the edge */
+  .k-grid .k-grid-norecords .ep-grid-no-records { margin: 0 !important; padding: 8px 12px !important; box-sizing: border-box; }
+  /* Page tab row: tabs are filled chips sitting on the divider line */
+  .ep-view-content .ep-tab-strip > kendo-tabstrip > .k-tabstrip-items-wrapper { box-shadow: none !important; }
+  .ep-view-content .ep-tab-strip > kendo-tabstrip > .k-tabstrip-items-wrapper > .k-tabstrip-items { height: auto !important; min-height: 0 !important; padding-top: 26px !important; padding-bottom: 0 !important; margin-bottom: 0 !important; align-items: flex-end !important; box-shadow: none !important; }
+  .ep-view-content .ep-tab-strip > kendo-tabstrip > .k-tabstrip-items-wrapper > .k-tabstrip-items::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: rgba(76, 86, 106, .6); z-index: 1; pointer-events: none; }
+  .ep-view-content .ep-tab-strip > kendo-tabstrip > .k-tabstrip-items-wrapper > .k-tabstrip-items > .k-tabstrip-item { background-color: #3b4252 !important; border-radius: 6px 6px 0 0 !important; margin-right: 6px !important; margin-bottom: 0 !important; top: 0 !important; transition: background-color .1s; }
+  .ep-view-content .ep-tab-strip > kendo-tabstrip > .k-tabstrip-items-wrapper > .k-tabstrip-items > .k-tabstrip-item:hover { background-color: #434c5e !important; }
+  .ep-view-content .ep-tab-strip > kendo-tabstrip > .k-tabstrip-items-wrapper > .k-tabstrip-items > .k-tabstrip-item.k-active { background-color: #434c5e !important; position: relative; z-index: 2; }
+  .ep-view-content .ep-tab-strip > kendo-tabstrip > .k-tabstrip-items-wrapper > .k-tabstrip-items > .k-tabstrip-item > .k-link { color: #d8dee9 !important; padding: 10px 18px !important; }
+  .ep-view-content .ep-tab-strip > kendo-tabstrip > .k-tabstrip-items-wrapper > .k-tabstrip-items > .k-tabstrip-item.k-active > .k-link { color: #88c0d0 !important; font-weight: 600; }
+  /* Left page navigator: starts level with the first card (below the tab line), rounded, inset from the bottom */
+  .ep-tree-nav-side-left { margin-top: 17px !important; height: auto !important; bottom: 12px !important; border-radius: 8px !important; overflow: hidden auto !important; padding-top: 4px !important; }
+  /* Breadcrumb record selector (⌄ next to the app name) */
+  .ep-crumb-button-arrow { width: 20px !important; height: 20px !important; padding: 0 !important; border: 0 !important; border-radius: 5px !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; vertical-align: middle; transition: background-color .1s; }
+  .ep-crumb-button-arrow:hover { background-color: #4c566a !important; }
+  .ep-crumb-button-arrow .mdi { background: transparent !important; border-radius: 0 !important; width: auto !important; height: auto !important; line-height: 1 !important; display: flex !important; margin: 0 !important; }
+  .ep-search-block.ep-crumb-arrow-line { padding: 8px 10px !important; }
+  .ep-search-block .ep-search-box { position: relative !important; }
+  .ep-search-block .ep-search-input { background-color: #2e3440 !important; border: 0 !important; border-radius: 6px !important; padding-left: 10px !important; box-sizing: border-box; }
+  .ep-search-block .ep-search-input:focus { box-shadow: inset 0 0 0 1px rgba(136, 192, 208, .5) !important; }
+  .ep-search-block .ep-component-top-element.ep-search-box > :is(.ep-search-icon, .ep-search-cancel).ep-search-icon, .ep-search-block .ep-component-top-element.ep-search-box > :is(.ep-search-icon, .ep-search-cancel) { position: absolute !important; top: 50% !important; right: 10px !important; transform: translateY(-50%) !important; height: 20px !important; width: 20px !important; line-height: 20px !important; margin: 0 !important; text-align: center; }
+  .ep-search-block .ep-search-cancel .mdi { line-height: 1 !important; display: flex !important; }
+  .ep-crumbBar-dropdown-list { padding: 4px 8px 4px 4px !important; scrollbar-width: thin; box-sizing: border-box; }
+  .ep-crumbBar-dropdown-list li { border-radius: 6px !important; }
+
+
+  /* ===== v8.13 — entry/tracker pages round 2, home spinners + menu filter state ===== */
+  /* Grid banner: Get More button inset from the right edge */
+  .erp-panel-card-grid-banner { padding-right: 8px !important; }
+  /* Search/lookup icon inside text fields (e.g. Project ID): 28px rounded hover target */
+  .ep-component-top-element.ep-text-box i.ep-search-icon.ep-search-icon.mdi.mdi { top: 6px !important; right: 6px !important; left: auto !important; width: 28px !important; height: 28px !important; padding: 0 !important; box-sizing: border-box !important; margin: 0 !important; display: flex !important; align-items: center !important; justify-content: center !important; line-height: 1 !important; border-radius: 6px !important; transition: background-color .1s, color .1s; }
+  .ep-component-top-element.ep-text-box i.ep-search-icon.ep-search-icon.mdi.mdi:hover { background-color: #434c5e !important; color: #88c0d0 !important; }
+  /* Dropdown "All"/placeholder row: rounded on all corners like the other options */
+  .k-list .k-list-optionlabel { border-radius: 6px !important; margin: 0 8px 2px 0 !important; }
+  /* Date filter calendar: sized for Inter so month names fit their cells */
+  .k-calendar.k-calendar-infinite { font-size: 14px !important; }
+  .k-calendar.k-calendar-infinite .k-calendar-view td .k-link { font-size: 12.5px !important; white-space: nowrap; }
+  /* Page-busy clock: below the environment tags instead of over them */
+  .ep-view-lock-overlay .ep-indicator-lock { top: 48px !important; color: #81a1c1 !important; }
+  /* Tab row: fully rounded chips that sit just above the divider (no clipped bottoms) */
+  .ep-view-content .ep-tab-strip > kendo-tabstrip > .k-tabstrip-items-wrapper > .k-tabstrip-items { padding-top: 22px !important; padding-bottom: 7px !important; }
+  .ep-view-content .ep-tab-strip > kendo-tabstrip > .k-tabstrip-items-wrapper > .k-tabstrip-items > .k-tabstrip-item { border-radius: 6px !important; }
+  /* Page toolbar: same gap above and below the divider between the two icon rows */
+  .ep-view-header .ep-primary-secondary-visible .ep-actions-primary-sec-buttons > .ep-action-primary-icon-container { padding-bottom: 6px !important; box-sizing: content-box; }
+  /* Cards: clear of the scrollbar, and a subtle outline so their edges read against the page */
+  .ep-tree-nav-main { padding-right: 10px !important; }
+  .ep-view-content .k-tabstrip-content { scrollbar-width: thin; }
+  .ep-view-content .ep-panel-card { border: 1px solid #434c5e !important; border-radius: 8px !important; overflow: hidden; }
+  /* Card toolbar buttons with an icon (e.g. Attachment): icon and label on one line */
+  .ep-toolbar-button .ep-button > .ep-button-content:has(> .mdi) { display: inline-flex !important; align-items: center !important; gap: 6px; white-space: nowrap !important; height: auto !important; }
+  .ep-toolbar-button .ep-button > .ep-button-content > .mdi { line-height: 1 !important; display: inline-flex !important; }
+  .ep-toolbar-button .ep-button { white-space: nowrap; min-width: max-content; }
+  /* Breadcrumb record selector: Epicor's square blue icon hover replaced by the rounded button hover; search field rounded */
+  .ep-crumb-bar-nav .ep-breadcrumb-item button.ep-crumb-button-arrow .mdi, .ep-crumb-bar-nav .ep-breadcrumb-item button.ep-crumb-button-arrow .mdi:hover, .ep-crumb-bar-nav .ep-breadcrumb-item button.ep-crumb-button-arrow .mdi:active { background: transparent !important; box-shadow: none !important; border: 0 !important; color: inherit !important; }
+  .ep-crumb-bar-nav .ep-breadcrumb-item button.ep-crumb-button-arrow { width: 20px !important; height: 20px !important; color: #81a1c1 !important; }
+  .ep-crumb-bar-nav .ep-breadcrumb-item button.ep-crumb-button-arrow:hover, .ep-crumb-bar-nav .ep-breadcrumb-item button.ep-crumb-button-arrow:active { background-color: #4c566a !important; color: #88c0d0 !important; }
+  .ep-crumb-bar-nav .ep-breadcrumb-item .ep-search-block .ep-search-input.ep-search-input { border-radius: 6px !important; }
+  /* Menu search filter button shows an "on" state while a type filter (not All) is applied */
+  .ep-panel-search > ep-dropdown-button .k-menu-button:has(.ep-dropdown-icon.mdi-filter) { background-color: rgba(136, 192, 208, .18) !important; color: #88c0d0 !important; box-shadow: inset 0 0 0 1px rgba(136, 192, 208, .45) !important; }
+  /* Numeric spinners: 4px between the arrow hover boxes */
+  .k-input-spinner.k-input-spinner { width: 64px !important; padding: 0 !important; }
+  .k-input-spinner .k-spinner-decrease.k-button { left: 4px !important; right: auto !important; }
+  .k-input-spinner .k-spinner-increase.k-button { left: 34px !important; right: auto !important; }
+  :is(.k-spinner-increase, .k-spinner-decrease).k-button { margin: 0 !important; flex: 0 0 26px; }
+
+
+  /* ===== v8.14 — home "+" tab, filter-row dropdown radius, advanced-filter header icons, search text area ===== */
+  /* Home edit mode: "+" tab the same height as the other tabs */
+  .khp-home-tab-plus.mdi { line-height: 20px !important; height: 20px !important; display: inline-flex !important; align-items: center; justify-content: center; vertical-align: top; }
+  .ep-draggable:has(> .khp-home-tab-plus) { display: inline-flex !important; vertical-align: top; }
+  /* Grid filter row: dropdown filters (e.g. All / Is True) match the text filters' 6px radius and height */
+  .k-filter-row .k-filtercell kendo-dropdownlist:not(.k-dropdown-operator).k-picker { border-radius: 6px !important; height: 26px !important; box-sizing: border-box !important; }
+  /* Advanced filters: column filter icons always visible (Epicor hid them until hover) and Nord-coloured, not black */
+  .k-grid-header .ep-grid-header .k-grid-filter-menu.k-grid-header-menu { display: flex !important; color: #81a1c1 !important; }
+  .k-grid-header .ep-grid-header .k-grid-filter-menu.k-grid-header-menu:hover, .k-grid-header .ep-grid-header .k-grid-filter-menu.k-grid-header-menu.k-active { color: #88c0d0 !important; }
+  .k-grid-header .k-grid-header-menu :is(kendo-svgicon, .k-svg-icon) { color: inherit !important; }
+  .k-grid-header .k-grid-header-menu svg { fill: currentColor !important; }
+  /* Multi-line text areas (e.g. Search panel "Where … Contains"): rounded corners */
+  .ep-component-top-element.ep-text-area { overflow: hidden; }
+  .ep-component-top-element.ep-text-area :is(kendo-floatinglabel, .k-textarea, textarea) { border-radius: 6px !important; }
+
+
+  /* ===== v8.14.1 — date fields: text never runs under the calendar icon; page-header date fields wide enough for month/day/year ===== */
+  .ep-component-top-element.ep-date-picker kendo-dateinput .k-input-inner { padding-right: 34px !important; text-overflow: clip; }
+  .ep-view-header ep-factory-control:has(.ep-date-picker) { width: 150px !important; min-width: 150px !important; }
+  .ep-view-header ep-factory-control:has(.ep-date-picker) :is(.ep-factory-control, erp-date-picker, ep-date-picker, .ep-date-picker) { width: 100% !important; max-width: none !important; display: block; }
+
+
+  /* ===== v8.14.2 — page overflow (⋮) level with the top icon row; empty-grid message inset on every grid ===== */
+  .ep-view-header .ep-actions { align-items: flex-start !important; }
+  .ep-view-header .ep-action-primary-icon-container { min-height: 30px !important; align-items: center !important; }
+  .ep-view-header .ep-actions > .ep-action-dropdown { top: 0 !important; margin-top: 0 !important; align-self: flex-start !important; }
+  /* Some grids render the empty message as a plain <p> (no ep-grid-no-records class) */
+  .k-grid .k-grid-norecords > td > p, .k-grid .k-grid-norecords > td > .k-grid-norecords-template { margin: 0 !important; padding: 8px 12px !important; box-sizing: border-box; text-align: left !important; }
+
+  /* =================== v9.1 — Kinetic-wide sweep (studios, designers, reports, lookups) =================== */
+  /* v9.1 — disabled Home tiles ("Menu is not available") read as disabled */
+  .khp-tile.tile-background.disabled { opacity: .45 !important; cursor: not-allowed !important; filter: saturate(.5) !important; }
+  .khp-tile.tile-background.disabled:hover { transform: none !important; box-shadow: none !important; }
+  /* v9.2 — checkbox "shape" tags (PO Approve/Hold/Unconfirmed…) as full-width field boxes */
+  ep-tag:has(ep-check-box.check-box-shape), ep-tag:has(ep-check-box.check-box-shape) > .ep-tag { display: block !important; width: 100% !important; }
+  ep-tag-item:has(> .ep-tag-item > .ep-shape-container > ep-check-box.check-box-shape),
+  ep-tag-item:has(> .ep-tag-item > .ep-shape-container > ep-check-box.check-box-shape) > .ep-tag-item { display: flex !important; width: 100% !important; }
+  .ep-tag-item-container.ep-shape-container:has(> ep-check-box.check-box-shape) {
+    width: 100% !important; box-sizing: border-box !important; min-height: 40px !important;
+    margin: 4px 0 8px !important; padding: 0 12px !important; align-items: center !important;
+    background: #3b4252 !important; border: 1px solid #434c5e !important; border-radius: 6px !important;
+    transition: border-color .15s ease;
+  }
+  .ep-tag-item-container.ep-shape-container:has(> ep-check-box.check-box-shape):hover { border-color: #4c566a !important; }
+  .ep-tag-item-container.ep-shape-container:has(> ep-check-box.check-box-shape input:checked) { border-color: #5e81ac !important; }
+  ep-tag-item.ep-item-disabled .ep-tag-item-container.ep-shape-container:has(> ep-check-box.check-box-shape) {
+    background: rgba(67, 76, 94, .3) !important; border-color: transparent !important;
+  }
+  /* v9.3 — floating labels never run under a field's search icon */
+  .ep-search-icon-for-label.ep-search-icon-for-label kendo-floatinglabel.k-floating-label-container > label.k-floating-label { max-width: calc(100% - 40px) !important; }
+  /* v9.4 — view title only truncates when the header actually carries fields */
+  .ep-view-header:not(:has(ep-text-box, ep-date-picker, ep-combo-box, ep-tag, ep-currency-box, ep-numeric-box, ep-numeric-editor, ep-drop-down)) .ep-view-title { max-width: 60% !important; }
+  /* report filter multi-selects (the chip box beside a lookup) match field height */
+  .ep-panel-card-body .ep-component-top-element.ep-multi-select { min-height: 40px !important; box-sizing: border-box !important; display: flex !important; align-items: center !important; border-radius: 6px !important; }
+  .ep-panel-card-body .ep-multi-select kendo-multiselect { width: 100% !important; min-height: 38px !important; border: 0 !important; background: transparent !important; }
+  /* v9.5 — lookup search slideout: even 10px field rhythm (first row had an extra mt-4) */
+  .basic-search-content > div > .row.mt-4:first-child { margin-top: 0 !important; }
+  /* v9.6 — Studio shell (BAQ Designer, Application Studio): header bar, tab strip, title, badges, breadcrumb */
+  .ep-studio-top-bar-info, .ep-studio-tab-bar, .ep-studio-tabstrip { background: #2e3440 !important; }
+  .ep-studio-top-bar-info { border-bottom: 1px solid #3b4252 !important; }
+  .ep-studio-tabstrip { border-bottom: 1px solid #3b4252 !important; }
+  .ep-studio-tabstrip .k-tabstrip-item { background: transparent !important; border: 0 !important; border-radius: 6px 6px 0 0 !important; color: #d8dee9 !important; }
+  .ep-studio-tabstrip .k-tabstrip-item:hover { background: #3b4252 !important; }
+  .ep-studio-tabstrip .k-tabstrip-item.k-active, .ep-studio-tabstrip .k-tabstrip-item.k-selected { background: #3b4252 !important; box-shadow: inset 0 -2px 0 #88c0d0 !important; }
+  .ep-studio-tabstrip .k-tabstrip-item .k-link { border-color: transparent !important; }
+  .ep-designer-title { color: #d8dee9 !important; }
+  .ep-studio-tabstrip .k-tabstrip-item.k-active .ep-designer-title, .ep-studio-tabstrip .k-tabstrip-item.k-selected .ep-designer-title { color: #88c0d0 !important; font-weight: 600 !important; }
+  .ep-designer-icon-color, svg.ep-designer-icon-color, svg.ep-designer-icon-color * { fill: currentColor !important; color: #88c0d0 !important; }
+  .ep-designer-hdr-title { color: #eceff4 !important; }
+  .ep-studio-hdr-badge-list .header-badge { border-radius: 999px !important; border: 1px solid currentColor !important; padding: 0 10px !important; height: 22px !important; display: inline-flex !important; align-items: center !important; gap: 6px !important; }
+  .ep-studio-hdr-badge-list .header-badge.warning { background: rgba(235, 203, 139, .14) !important; color: #ebcb8b !important; }
+  .ep-studio-hdr-badge-list .header-badge.warning .badge-text, .ep-studio-hdr-badge-list .header-badge .badge-icon { color: inherit !important; }
+  .ep-studio-hdr-badge-list .header-badge.success { background: rgba(163, 190, 140, .14) !important; color: #a3be8c !important; }
+  .ep-studio-hdr-badge-list .header-badge.error, .ep-studio-hdr-badge-list .header-badge.danger { background: rgba(191, 97, 106, .14) !important; color: #e5a0a6 !important; }
+  .ep-studio-hdr-badge-list .header-badge.info { background: rgba(136, 192, 208, .14) !important; color: #88c0d0 !important; }
+  .ep-studio-top-bar-info .breadcrumb { background: transparent !important; margin: 0 !important; }
+  .ep-studio-top-bar-info .breadcrumb-item, .ep-studio-top-bar-info .breadcrumb-item span { color: #88c0d0 !important; }
+  .ep-studio-top-bar-info .breadcrumb-item.active, .ep-studio-top-bar-info .breadcrumb-item.active span { color: #aab4c6 !important; }
+  .ep-studio-top-bar-info .breadcrumb-item + .breadcrumb-item::before { color: #616e88 !important; }
+
+  /* v9.6 — Monaco editor (BAQ phrase, BPM/C# editors) remapped from the light "vs" theme to Nord */
+  .monaco-editor.vs, .monaco-editor.vs .monaco-editor-background, .monaco-editor.vs .margin, .monaco-editor.vs .inputarea.ime-input { background-color: #2e3440 !important; }
+  .monaco-editor.vs { --vscode-editor-background: #2e3440; --vscode-editor-foreground: #d8dee9; color: #d8dee9 !important; }
+  .monaco-editor.vs .line-numbers { color: #616e88 !important; }
+  .monaco-editor.vs .line-numbers.active-line-number { color: #d8dee9 !important; }
+  .monaco-editor.vs .view-overlays .current-line { border-color: #3b4252 !important; }
+  .monaco-editor.vs .cursors-layer .cursor { background-color: #d8dee9 !important; border-color: #d8dee9 !important; color: #2e3440 !important; }
+  .monaco-editor.vs .selected-text, .monaco-editor.vs .focused .selected-text { background-color: rgba(136, 192, 208, .22) !important; }
+  .monaco-editor.vs .selectionHighlight, .monaco-editor.vs .wordHighlight, .monaco-editor.vs .wordHighlightStrong { background-color: rgba(136, 192, 208, .12) !important; }
+  .monaco-editor.vs .scrollbar .slider { background: rgba(76, 86, 106, .6) !important; border-radius: 6px !important; }
+  .monaco-editor.vs .scrollbar .slider:hover, .monaco-editor.vs .scrollbar .slider.active { background: rgba(97, 110, 136, .8) !important; }
+  .monaco-editor.vs .decorationsOverviewRuler { opacity: .5; }
+  .monaco-editor.vs .suggest-widget, .monaco-editor.vs .monaco-hover, .monaco-editor.vs .find-widget, .monaco-editor.vs .parameter-hints-widget { background: #3b4252 !important; color: #d8dee9 !important; border: 1px solid #434c5e !important; border-radius: 6px !important; box-shadow: 0 6px 18px rgba(0,0,0,.35) !important; }
+  .monaco-editor.vs .suggest-widget .monaco-list-row.focused { background: #434c5e !important; color: #eceff4 !important; }
+  .monaco-editor.vs .find-widget .monaco-inputbox { background: #2e3440 !important; color: #d8dee9 !important; border-color: #434c5e !important; }
+  .monaco-editor.vs .bracket-match { background: rgba(136, 192, 208, .15) !important; border-color: #4c566a !important; }
+  .monaco-editor.vs .bracket-highlighting-0 { color: #ebcb8b !important; }
+  .monaco-editor.vs .bracket-highlighting-1 { color: #b48ead !important; }
+  .monaco-editor.vs .bracket-highlighting-2 { color: #88c0d0 !important; }
+  .monaco-editor.vs .mtk1, .monaco-editor.vs .mtk10 { color: #d8dee9 !important; }
+  .monaco-editor.vs .mtk2 { color: #2e3440 !important; }
+  .monaco-editor.vs .mtk3, .monaco-editor.vs .mtk20, .monaco-editor.vs .mtk21 { color: #a3adbf !important; }
+  .monaco-editor.vs .mtk4, .monaco-editor.vs .mtk9, .monaco-editor.vs .mtk14, .monaco-editor.vs .mtk17, .monaco-editor.vs .mtk18 { color: #bf616a !important; }
+  .monaco-editor.vs .mtk5 { color: #88c0d0 !important; }
+  .monaco-editor.vs .mtk6, .monaco-editor.vs .mtk19, .monaco-editor.vs .mtk24, .monaco-editor.vs .mtk26, .monaco-editor.vs .mtk27 { color: #81a1c1 !important; }
+  .monaco-editor.vs .mtk7, .monaco-editor.vs .mtk11, .monaco-editor.vs .mtk16, .monaco-editor.vs .mtk22 { color: #b48ead !important; }
+  .monaco-editor.vs .mtk8 { color: #8f9bb3 !important; font-style: italic; }
+  .monaco-editor.vs .mtk12, .monaco-editor.vs .mtk15 { color: #d08770 !important; }
+  .monaco-editor.vs .mtk13, .monaco-editor.vs .mtk25 { color: #8fbcbb !important; }
+  .monaco-editor.vs .mtk23 { color: #a3be8c !important; }
+  .monaco-editor.vs .minimap canvas { filter: invert(.84) hue-rotate(180deg) saturate(.7) !important; }
+  .monaco-editor.vs .minimap-shadow-visible { box-shadow: none !important; }
+  .monaco-editor.vs .minimap-slider .minimap-slider-horizontal { background: rgba(136, 192, 208, .12) !important; }
+  /* v9.7 — user panel caption (company/site line) reaches 4.5:1 on #3b4252 */
+  .ep-user-details .ep-user-caption, .ep-user-details .ep-user-caption span { color: #aab4c6 !important; }
+  /* v9.8 — DHTMLX diagram canvas (BAQ Phrase Build, workflow designers) */
+  .ep-diagram .dhx_widget, .ep-diagram .dhx_layout-cell, .ep-diagram .dhx_diagram, .ep-diagram .dhx_diagram__scale-container { background-color: #2e3440 !important; }
+  .ep-diagram .dhx_diagram { background-image: radial-gradient(#3b4252 1px, transparent 1px) !important; background-size: 16px 16px !important; }
+  .ep-diagram .shape.data-table, .ep-diagram .dhx_diagram_flow_item .shape { background: #3b4252 !important; border: 1px solid #4c566a !important; border-radius: 8px !important; color: #d8dee9 !important; box-shadow: 0 2px 6px rgba(0, 0, 0, .25) !important; overflow: hidden; }
+  .ep-diagram .shape .shape-seq { background: #434c5e !important; color: #88c0d0 !important; border-right: 1px solid #4c566a !important; }
+  .ep-diagram .shape .shape-num { color: #88c0d0 !important; font-weight: 600 !important; }
+  .ep-diagram .shape .shape-text { color: #eceff4 !important; }
+  .ep-diagram .dhx_diagram_flow_item:hover .shape { border-color: #616e88 !important; }
+  .ep-diagram .dhx_diagram_item--selected .shape, .ep-diagram .dhx_diagram_shape.dhx_diagram_item--selected .shape { border-color: #88c0d0 !important; box-shadow: 0 0 0 2px rgba(136, 192, 208, .25) !important; }
+  .ep-diagram .dhx_diagram_line path { stroke: #81a1c1 !important; }
+  .ep-diagram .dhx_diagram_line marker path, .ep-diagram .dhx_diagram_line polygon { fill: #81a1c1 !important; stroke: #81a1c1 !important; }
+  .ep-diagram .dhx_diagram_group { background: rgba(59, 66, 82, .35) !important; border-color: #434c5e !important; border-radius: 8px !important; }
+  .ep-diagram .dhx_diagram_group__header { background: #3b4252 !important; color: #d8dee9 !important; border-color: #434c5e !important; }
+  .ep-diagram .dhx_diagram_group__header_text { color: #d8dee9 !important; }
+  .ep-diagram .dhx_diagram_group .dxi, .ep-diagram .dhx_diagram_icon { color: #a3adbf !important; }
+  /* studio toolbox (table list) labels */
+  .ep-studio-toolbox-item-label { color: #a3adbf !important; }
+  .ep-studio-toolbox-list-item:hover .ep-studio-toolbox-item-label { color: #d8dee9 !important; }
+  /* v9.9 — Application Studio landing: layer links use the link token (was #5e81ac, 2.5:1) */
+  .k-grid a.ep-layer-anchor { color: #88c0d0 !important; }
+  .k-grid a.ep-layer-anchor:hover { color: #8fbcbb !important; text-decoration: underline !important; }
+  /* v9.10 — Application Studio page designer: light containers + org-chart page cards */
+  .metafx-page-designer .grid-panel-view-container { background: #2e3440 !important; }
+  .metafx-page-designer .topBar { background: #3b4252 !important; border-bottom: 1px solid #434c5e !important; color: #d8dee9 !important; }
+  .metafx-page-designer .page-functions a.ep-color-blue, .metafx-page-designer .page-functions a.ep-color-blue span { color: #88c0d0 !important; }
+  .metafx-page-designer .page-functions a.ep-color-blue:hover, .metafx-page-designer .page-functions a.ep-color-blue:hover span { color: #8fbcbb !important; }
+  .ep-diagram .dhx_diagram_image .dhx_item_shape, .dhx_org_chart .dhx_item_shape { background: #3b4252 !important; border: 1px solid #4c566a !important; border-radius: 8px !important; box-shadow: 0 2px 6px rgba(0, 0, 0, .25) !important; }
+  .dhx_org_chart .dhx_diagram_item:hover .dhx_item_shape { border-color: #616e88 !important; }
+  .dhx_org_chart .dhx_diagram_item--selected .dhx_item_shape { border-color: #88c0d0 !important; box-shadow: 0 0 0 2px rgba(136, 192, 208, .25) !important; }
+  .dhx_org_chart .dhx_orgcard__title { color: #a3adbf !important; }
+  .dhx_org_chart .dhx_orgcard__text { color: #eceff4 !important; }
+  .dhx_org_chart .dhx_diagram_line path, .dhx_org_chart .dhx_diagram_connector path { stroke: #616e88 !important; }
+  .dhx_org_chart, .dhx_org_chart .dhx_diagram__scale-container { background-color: #2e3440 !important; }
+  .ep-customization-hdr .cus-layer { background: #3b4252 !important; border: 1px solid #434c5e !important; border-radius: 6px !important; color: #d8dee9 !important; }
+  .ep-customization-hdr .cus-layer .cus-header { color: #eceff4 !important; }
+  /* v9.11 — Application Studio designer: Epicor paints IDE chrome with --neutral-20/27, which this theme maps
+     to light text tones. Re-surface each consumer explicitly. */
+  .app-studio-designer .ep-menu-bar .ep-menu-bar-container.ep-menu-bar-container { background-color: #272c36 !important; }
+  .app-studio-designer .ep-metafx-ide-header { background: #3b4252 !important; border-bottom: 1px solid #434c5e !important; }
+  .app-studio-designer .ep-tab-strip > kendo-tabstrip.k-tabstrip, .app-studio-designer .ep-metafx-ide kendo-tabstrip.k-tabstrip { background: #3b4252 !important; }
+  .app-studio-designer .zoom-scale { background: #3b4252 !important; border: 1px solid #434c5e !important; border-radius: 6px !important; }
+  .app-studio-designer .k-splitbar .k-resize-handle { background: #4c566a !important; border-radius: 2px !important; }
+  .app-studio-designer .erp-dynamic-container .ep-component .ep-component-top-element .k-floating-label-container,
+  .app-studio-designer .plugin-property-factory-item .k-floating-label-container { background: transparent !important; }
+  .app-studio-designer .designer-category-heading, .app-studio-designer .designer-category { background: transparent !important; }
+  .app-studio-designer .designer-category-title { color: #88c0d0 !important; font-weight: 600 !important; }
+  .app-studio-designer .breadcrumb-root .breadcrumb-item, .app-studio-designer .breadcrumb-root .breadcrumb-item span { color: #88c0d0 !important; }
+  .app-studio-designer .breadcrumb-root .breadcrumb-item.active, .app-studio-designer .breadcrumb-root .breadcrumb-item.active span { color: #aab4c6 !important; }
+  .app-studio-designer .ep-disabled > .ep-component-top-element.ep-component-top-element .k-floating-label.k-floating-label { color: #a7b1c3 !important; }
+  .app-studio-designer .designer-toolbar-layout, .app-studio-designer .topBar, .app-studio-designer .designer-toolbar-tabstrip { background: #3b4252 !important; border-color: #434c5e !important; }
+  .app-studio-designer .list-item-label { color: #d8dee9 !important; }
+  .app-studio-designer .controlHideShow .ep-button-content { color: #d8dee9 !important; }
+  .app-studio-designer .toolbar-item.size-info { color: #2e3440 !important; border-radius: 999px !important; padding: 0 8px !important; font-weight: 600 !important; }
+  /* v9.12 — BPM designer: directive-type status chip + studio property category titles */
+  .erp-bpm-hb-status-item { border-radius: 999px !important; padding: 0 8px !important; }
+  .erp-bpm-hb-status-item.erp-bpm-hb-status-item-selected { background: rgba(163, 190, 140, .16) !important; color: #a3be8c !important; box-shadow: inset 0 0 0 1px #a3be8c !important; font-weight: 600 !important; }
+  .ep-studio-category-title { color: #88c0d0 !important; font-weight: 600 !important; }
+  /* BPM widget icons ship as #333 SVGs — lift them to Snow Storm on the dark canvas/toolbox */
+  img.diagram-icon, img[src*="/assets/bpm/images/"] { filter: brightness(0) invert(.87) !important; }
+  /* DHTMLX shape-bar thumbnails (light fills baked into SVG attributes) */
+  .dhx_diagram_editor_shapebar path[fill="#EEF1F6" i] { fill: #3b4252 !important; }
+  .dhx_diagram_editor_shapebar path[stroke="#B8C6D6" i] { stroke: #4c566a !important; }
+  .dhx_diagram_editor_shapebar .dhx_diagram_item__text { color: #d8dee9 !important; }
+}
