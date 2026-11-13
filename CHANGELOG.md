@@ -1,5 +1,18 @@
 # Changelog
 
+## 9.2.1
+- **Selection lists:** the Attributes dual list (Available ⇄ Selected) is now two rounded, bordered cards. Each has a header strip, divider rows and a thin scrollbar, and "Clear All" is a rounded text button.
+- **Address format builder:** the token palette is a rounded card with hover rows. Drag handles are visible; they were 15% black. Format lines are rounded drop zones with an italic hint, and the delete button turns red on hover.
+- **App Studio:**
+  - The Application Map page icons are tinted to the icon colour.
+  - The card toolbar and collapse toggle are Nord-coloured (the toggle was bright blue), and the "Slide Out Panels" heading is resized to match.
+  - The properties header is on one row (zoom + Add/Edit/Delete Page).
+  - Fields in the properties panel stay visible when read-only.
+  - The page editor's floating component toolbar is a dark pill; it was square light-blue tiles.
+  - The slide-out panel search row has even insets.
+- **Toasts:** the round icon badges use aurora tints. Persistent toasts get a tinted header, a label chip and a rounded action button.
+- **Splitter bars** in the studios: Nord surface with a subtle grip that highlights on hover.
+
 ## 9.2.0
 - **Application Studio:** the left slide-out panels (Layouts, Rules, Events, Views, Data) were light with faint text. They are now raised Nord panels with rounded tree rows, hover and selected states, page-filled search fields and a matching add button. Also covered:
   - The properties header is one raised bar. The zoom control no longer truncates to "10…", and Add/Edit/Delete Page are rounded text buttons.

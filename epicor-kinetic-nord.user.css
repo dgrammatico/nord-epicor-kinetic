@@ -1,7 +1,7 @@
 /* ==UserStyle==
 @name           Epicor Kinetic - Nord Polar Night
 @namespace      github.com/dgrammatico/nord-epicor-kinetic
-@version        9.2.0
+@version        9.2.1
 @description    Nord Polar Night dark theme for Epicor Kinetic (cloud and on-prem). Kendo UI colour variables + components, Epicor ep-/erp- wrappers.
 @author         Dominic Grammatico
 @homepageURL    https://github.com/dgrammatico/nord-epicor-kinetic
@@ -1236,7 +1236,7 @@
   }
   .ep-action-buttons > .ep-action-active-circle-icon::before { line-height: 8px !important; }
 
-  /* =================== v9.2 — studios round 2, toasts, segmented controls, sidebars =================== */
+  /* =================== v9.2 — studios round 2, toasts, segmented controls, sidebars, selection lists =================== */
   /* v9.2 — Application Studio, round 2. Epicor paints the designer's dark chrome with --neutral-20/27 (surfaces)
      and --neutral-80/95 (text); this theme maps those tokens the other way round for ordinary Kinetic pages.
      Every designer consumer of those tokens is re-pointed here. */
@@ -1291,7 +1291,7 @@
   .ep-metafx-ide-header .ep-button-wrapper button.ep-button.ep-primary .mdi { color: inherit !important; }
 
   /* ---- properties column header: zoom + Add/Edit/Delete page on one raised bar ---- */
-  .metafx-page-designer .grid-panel-header { background: #3b4252 !important; border-bottom: 1px solid #434c5e !important; align-items: center !important; gap: 8px !important; padding: 0 8px !important; flex-wrap: wrap !important; }
+  .metafx-page-designer .grid-panel-header { background: #3b4252 !important; border-bottom: 1px solid #434c5e !important; align-items: center !important; gap: 8px !important; padding: 0 8px !important; flex-wrap: nowrap !important; min-height: 48px !important; }
   .metafx-page-designer .grid-panel-header .topBar { background: transparent !important; border: 0 !important; }
   .app-studio-designer .zoom-scale, .topBar .ep-pages-left .zoom-scale { display: inline-flex !important; align-items: center !important; width: auto !important; height: 32px !important; background: #2e3440 !important; border: 1px solid #434c5e !important; border-radius: 6px !important; overflow: hidden; }
   .topBar .ep-pages-left .zoom-scale .ep-num, .topBar .ep-pages-left .zoom-scale .ep-numeric-box { background: transparent !important; width: 56px !important; min-width: 56px !important; height: 30px !important; }
@@ -1353,6 +1353,11 @@
   .app-studio-designer .ep-panel-chat-container .ep-conversation .k-chat .ep-conversation-textarea textarea::placeholder { color: #8f9bb3 !important; }
   .app-studio-designer .ep-panel-chat-container .ep-conversation .k-chat .ep-ai-plan .mdi { background-color: #434c5e !important; color: #88c0d0 !important; }
   .small-device-active { background-color: #3b4252 !important; }
+  .metafx-page-designer .grid-panel-header .topBar { flex: 0 0 auto !important; width: auto !important; height: auto !important; }
+  .metafx-page-designer .page-functions { flex: 1 1 auto !important; width: auto !important; justify-content: flex-end !important; min-width: 0 !important; }
+  /* properties body is a page surface so (disabled) fields keep contrast; the tab row stays raised */
+  .grid-panel-layout .grid-panel-view-container kendo-tabstrip.k-tabstrip, .grid-panel-layout .grid-panel-view-container .parent-tab-component kendo-tabstrip { background: #2e3440 !important; }
+  .grid-panel-layout .grid-panel-view-container kendo-tabstrip .k-tabstrip-items-wrapper { background: #3b4252 !important; }
   /* v9.2 — toasts (save/error/info pop-ups) were a light #e5e9f0 card: re-surface as a raised Nord card with an aurora edge */
   .toast-container .toast {
     background-color: #3b4252 !important; background-image: none !important; color: #e5e9f0 !important;
@@ -1374,6 +1379,27 @@
   /* grid "dark" cells and gantt progress used Epicor's dark token that the theme maps light */
   .ep-grid .ep-dark { background-color: #2e3440 !important; }
   .gantt_task_line.gantt_task_inline_color .gantt_task_progress { background-color: rgba(46, 52, 64, .35) !important; }
+  .toast-container .toast:hover { box-shadow: 0 10px 28px rgba(0, 0, 0, .45) !important; }
+  /* classic toasts: round icon badge → aurora tint + aurora glyph (a coloured glyph on the old solid badge vanished) */
+  .toast-container .toast:has(div.toast-classic)::before { border-radius: 50% !important; }
+  .toast-info:has(div.toast-classic)::before    { background-color: rgba(136, 192, 208, .18) !important; color: #88c0d0 !important; }
+  .toast-success:has(div.toast-classic)::before { background-color: rgba(163, 190, 140, .18) !important; color: #a3be8c !important; }
+  .toast-error:has(div.toast-classic)::before   { background-color: rgba(191, 97, 106, .2) !important;  color: #e5a0a6 !important; }
+  .toast-warning:has(div.toast-classic)::before { background-color: rgba(235, 203, 139, .18) !important; color: #ebcb8b !important; }
+  .toast-info:has(div.toast-classic) .toast-progress    { background-color: #88c0d0 !important; }
+  .toast-success:has(div.toast-classic) .toast-progress { background-color: #a3be8c !important; }
+  .toast-error:has(div.toast-classic) .toast-progress   { background-color: #bf616a !important; }
+  .toast-warning:has(div.toast-classic) .toast-progress { background-color: #ebcb8b !important; }
+  /* static (persistent) toasts: tinted header strip, legible label chip, rounded action button */
+  .toast-container .toast:has(div.toast-static) div.toast-static-header { background-color: #434c5e !important; }
+  .toast-container .toast:has(div.toast-static) div.toast-static-header .toast-static-header { background-color: #2e3440 !important; border-radius: 999px !important; padding: 1px 8px !important; }
+  .toast-info:has(div.toast-static) div.toast-static-header .toast-static-header-label    { color: #88c0d0 !important; }
+  .toast-success:has(div.toast-static) div.toast-static-header .toast-static-header-label { color: #a3be8c !important; }
+  .toast-error:has(div.toast-static) div.toast-static-header .toast-static-header-label   { color: #e5a0a6 !important; }
+  .toast-warning:has(div.toast-static) div.toast-static-header .toast-static-header-label { color: #ebcb8b !important; }
+  .toast-container .toast:has(div.toast-static) div.toast-static-header button.btn-toast-act { color: #d8dee9 !important; }
+  .toast-container .toast:has(div.toast-static) .toast-static-body { color: #d8dee9 !important; }
+  .toast-container .toast:has(div.toast-static) div.toast-static-body button.btn-action-expand { background-color: #434c5e !important; color: #e5e9f0 !important; border-radius: 6px !important; border: 0 !important; }
   /* v9.2 — BAQ / BPM studio, round 2 */
   /* header bar: the right-hand action group had its own off-palette fill and a white underline */
   .ep-studio-header-bar .studio-header-right { background: transparent !important; border: 0 !important; color: #d8dee9 !important; }
@@ -1409,6 +1435,13 @@
   .ep-studio-designer-container .k-tabstrip-items { flex-wrap: nowrap !important; overflow-x: auto !important; overflow-y: hidden !important; scrollbar-width: none !important; }
   .ep-studio-designer-container .k-tabstrip-items::-webkit-scrollbar { display: none !important; }
   .ep-studio-designer-container .k-tabstrip-items > .k-item { flex: 0 0 auto !important; white-space: nowrap !important; }
+  /* splitter bars (studios, App Studio): were #343234 with #ccc grips */
+  .k-splitbar { background-color: #2e3440 !important; color: #81a1c1 !important; }
+  .k-splitbar:hover, .k-splitbar.k-hover, .k-splitbar:focus { background-color: #3b4252 !important; }
+  .k-splitbar .k-resize-handle { background-color: #4c566a !important; border-radius: 2px !important; }
+  .k-splitbar:hover .k-resize-handle { background-color: #88c0d0 !important; }
+  .k-splitbar :is(.k-collapse-next, .k-collapse-prev, .k-expand-next, .k-expand-prev) { color: #81a1c1 !important; border-radius: 4px !important; }
+  .k-splitbar :is(.k-collapse-next, .k-collapse-prev, .k-expand-next, .k-expand-prev):hover { color: #88c0d0 !important; background: #434c5e !important; }
   /* v9.2 — Kendo button groups (Query Diagram | Display Fields | Sort Order, view switchers) as one segmented control */
   .ep-button-group kendo-buttongroup.k-button-group, kendo-buttongroup.k-button-group {
     background: #3b4252 !important; border: 1px solid #434c5e !important; border-radius: 8px !important;
@@ -1435,4 +1468,94 @@
   .ep-sidebar.left .k-treeview .k-treeview-leaf:hover, .ep-sidebar.left .k-treeview .k-treeview-leaf.k-hover { background: #434c5e !important; color: #eceff4 !important; }
   .ep-sidebar.left .k-treeview .k-treeview-leaf.k-selected, .ep-sidebar.left .k-treeview .k-treeview-leaf.k-focus { background: rgba(136, 192, 208, .16) !important; color: #eceff4 !important; }
   .ep-sidebar.left .k-treeview .ep-treeview-item-node-iconclass, .ep-sidebar.left .k-treeview .k-icon { color: #81a1c1 !important; }
+  /* search + add row: symmetric 15px insets and an 8px gap (the add button touched the panel edge) */
+  .left-panel-search { gap: 8px !important; padding-right: 14px !important; box-sizing: border-box !important; align-items: center !important; }
+  .left-panel-search > :first-child { flex: 1 1 auto !important; min-width: 0 !important; }
+  .left-panel-search .ep-search-input { width: 100% !important; box-sizing: border-box !important; }
+  /* v9.2 — Epicor selection lists: dual list (Attributes: Available ⇄ Selected), address-format builder, designer list panels */
+  /* dual list: two rounded raised cards with a header strip, divider rows and a thin scrollbar */
+  .ep-selection-list .ep-selection-list-container.ep-selection-list-dual .ep-single-list {
+    background-color: #3b4252 !important; border: 1px solid #434c5e !important; border-radius: 8px !important;
+    box-shadow: none !important; overflow: auto !important; scrollbar-width: thin; scrollbar-color: #4c566a transparent; }
+  .ep-selection-list .ep-selection-list-container .ep-selection-margin { margin-right: 16px !important; }
+  .ep-selection-list .ep-single-list > .label-text, .ep-selection-list .ep-single-list > .target-label-text {
+    margin: 0 !important; padding: 0 12px !important; height: 36px !important; line-height: 36px !important; width: auto !important;
+    font-size: 13px !important; font-weight: 600 !important; color: #eceff4 !important; border-bottom: 1px solid rgba(76, 86, 106, .6) !important; }
+  .ep-selection-list .ep-selection-list-container .ep-selection-header {
+    height: 40px !important; max-height: 40px !important; padding: 0 12px !important; align-items: center !important;
+    border-bottom: 1px solid rgba(76, 86, 106, .6) !important; width: auto !important; box-sizing: border-box !important; }
+  .ep-selection-list .ep-selection-list-container .ep-selected-header-action {
+    color: #88c0d0 !important; text-decoration: none !important; font-weight: 500 !important; font-size: 13px !important;
+    padding: 3px 8px !important; margin-left: -8px !important; border-radius: 6px !important; line-height: 18px !important; max-height: none !important; }
+  .ep-selection-list .ep-selection-list-container .ep-selected-header-action:hover { background: #434c5e !important; color: #8fbcbb !important; }
+  .ep-selection-list .ep-selection-list-container .ep-list-box { border-bottom: 1px solid rgba(76, 86, 106, .45) !important; padding: 0 12px !important; min-height: 36px; display: flex; align-items: center; }
+  .ep-selection-list .ep-selection-list-container .ep-list-box:hover { background: #434c5e !important; }
+  .ep-selection-list .ep-selection-list-container .ep-item-text { color: #e5e9f0 !important; }
+  .ep-selection-list .ep-selection-list-container .ep-item-description, .ep-selection-list .ep-selection-list-container .ep-required { color: #a3adbf !important; }
+  .ep-selection-list .ep-selection-list-container .ep-item-command { border-color: #4c566a !important; border-radius: 4px !important; color: #a3adbf !important; }
+  .ep-selection-list .ep-selection-list-container .ep-panel-list-header { color: #a3adbf !important; border-bottom-color: rgba(76, 86, 106, .6) !important; }
+  .ep-selection-list .ep-selection-list-container .ep-panel-list-header span.text-done { color: #88c0d0 !important; }
+  .ep-selection-list .ep-selection-list-container.ep-selection-panel-list .ep-single-list-item { border-radius: 6px !important; }
+  .ep-selection-list .ep-selection-list-container.ep-selection-panel-list .ep-single-list-item:hover { background-color: #434c5e !important; }
+  .ep-selection-list .ep-selection-list-container .cdk-drag-preview { background-color: #434c5e !important; border-radius: 6px !important; color: #eceff4 !important; box-shadow: 0 8px 20px rgba(0, 0, 0, .4) !important; }
+  .ep-selection-list .ep-selection-list-container:focus { border-color: #88c0d0 !important; }
+  /* drag handles were rgba(0,0,0,.15) — invisible on dark */
+  .ep-single-list-item .drag, .ep-single-list-item.ep-selection-tree-wrapper .drag, .ep-horizontal-item .drag { color: #8f9bb3 !important; }
+  .ep-single-list-item:hover .drag, .ep-horizontal-item:hover .drag { color: #88c0d0 !important; }
+
+  /* address-format builder: token palette + format lines */
+  .ep-address-container { gap: 16px !important; align-items: flex-start !important; }
+  .ep-address-container .ep-vertical-container {
+    background: #3b4252 !important; border: 1px solid #434c5e !important; border-radius: 8px !important; padding: 4px !important;
+    box-sizing: border-box !important; overflow-y: auto !important; scrollbar-width: thin; scrollbar-color: #4c566a transparent; }
+  .ep-address-container .ep-vertical-container .ep-single-list-item {
+    min-height: 36px !important; height: auto !important; padding: 0 8px !important; border: 0 !important; border-radius: 6px !important;
+    display: flex !important; align-items: center !important; gap: 6px !important; color: #d8dee9 !important; }
+  .ep-address-container .ep-vertical-container .ep-single-list-item:hover { background: #434c5e !important; color: #eceff4 !important; }
+  .ep-address-container .ep-lines-container { margin-left: 0 !important; }
+  .ep-horizontal-lists { display: flex !important; align-items: center !important; gap: 8px !important; margin-bottom: 6px !important; }
+  .ep-horizontal-lists .ep-selection-container { flex: 1 1 auto !important; min-width: 0 !important; }
+  .ep-horizontal-lists .ep-selection-list-container { background: transparent !important; }
+  .ep-selection-list .ep-selection-list-container .ep-horizontal-list {
+    background: #3b4252 !important; border: 1px solid #434c5e !important; border-radius: 8px !important;
+    min-height: 40px !important; padding: 3px 4px !important; gap: 2px !important; align-items: center !important; box-sizing: border-box !important; }
+  .ep-selection-list .ep-selection-list-container .ep-horizontal-list.cdk-drop-list-receiving,
+  .ep-selection-list .ep-selection-list-container .ep-horizontal-list.cdk-drop-list-dragging { border-color: #88c0d0 !important; }
+  .ep-selection-list .ep-selection-list-container .ep-horizontal-list .empty-content { color: #8f9bb3 !important; margin: 0 8px !important; font-style: italic; line-height: 32px; }
+  .ep-selection-list .ep-selection-list-container .ep-horizontal-list .ep-horizontal-item {
+    margin: 0 !important; padding: 0 8px !important; min-height: 32px; display: flex; align-items: center; gap: 6px; border-radius: 6px; color: #e5e9f0; }
+  .ep-selection-list .ep-selection-list-container .ep-horizontal-list .ep-horizontal-item:hover { background: #434c5e !important; }
+  .ep-horizontal-lists .ep-delete-line {
+    width: 30px !important; height: 30px !important; flex: 0 0 30px !important; display: inline-flex !important; align-items: center !important;
+    justify-content: center !important; border-radius: 6px !important; color: #81a1c1 !important; cursor: pointer; }
+  .ep-horizontal-lists .ep-delete-line:hover { background: rgba(191, 97, 106, .16) !important; color: #bf616a !important; }
+  .ep-address-container .ep-vertical-container { overflow-x: hidden !important; }
+  .ep-address-container .ep-vertical-container > * { min-width: 0 !important; max-width: 100% !important; }
+  .ep-address-container .ep-vertical-container .ep-items-list, .ep-address-container .ep-vertical-container .ep-items-list:hover { overflow-x: hidden !important; overflow-y: auto !important; scrollbar-width: thin; scrollbar-color: #4c566a transparent; }
+  .ep-address-container .ep-vertical-container .ep-list-box { width: auto !important; max-width: 100% !important; box-sizing: border-box !important; padding: 0 !important; border-bottom: 0 !important; }
+  .ep-address-container .ep-vertical-container .ep-list-box:hover { background: transparent !important; }
+  /* v9.2 — Application Map: page-type icons (amber SVGs) tinted to the icon colour, card accent bar, section title, badge */
+  .dhx_org_chart .dhx_orgcard__img { filter: brightness(0) saturate(100%) invert(72%) sepia(14%) saturate(1006%) hue-rotate(169deg) brightness(88%) contrast(86%) !important; border-radius: 0 !important; }
+  .dhx_org_chart .dhx_item_header { border-radius: 8px 8px 0 0 !important; height: 3px !important; overflow: hidden; }
+  .dhx_org_chart .dhx_item_header[style*="rgb(3, 169, 244)"] { background: #88c0d0 !important; }
+  .multipage-canvas .slidingpage > h2 { font-size: 15px !important; font-weight: 600 !important; color: #eceff4 !important; padding: 12px 0 8px !important; margin: 0 !important; letter-spacing: 0 !important; }
+  .app-studio-designer .ep-badge .displayList { border-radius: 999px !important; padding: 2px 10px !important; font-size: 11px !important; font-weight: 600 !important; background: rgba(136, 192, 208, .14) !important; color: #88c0d0 !important; box-shadow: inset 0 0 0 1px rgba(136, 192, 208, .45) !important; }
+  /* card toolbar chips (edit/delete/add) and the collapse toggle (was #03a9f4) */
+  .dhx_org_chart .dhx_icon, .ep-diagram .dhx_icon { background: #3b4252 !important; border: 1px solid #4c566a !important; border-radius: 6px !important; }
+  .dhx_org_chart .dhx_icon .mdi, .ep-diagram .dhx_icon .mdi { color: #81a1c1 !important; }
+  .dhx_org_chart .dhx_icon:hover, .ep-diagram .dhx_icon:hover { background: rgba(191, 97, 106, .16) !important; border-color: #bf616a !important; }
+  .dhx_org_chart .dhx_icon:hover .mdi, .ep-diagram .dhx_icon:hover .mdi { color: #bf616a !important; }
+  .dhx_diagram .dhx_diagram__icon { background: #434c5e !important; color: #d8dee9 !important; border: 1px solid #616e88 !important; box-shadow: none !important; }
+  .dhx_diagram .dhx_diagram__icon:hover { background: rgba(136, 192, 208, .2) !important; border-color: #88c0d0 !important; color: #88c0d0 !important; }
+  .dhx_diagram .dhx_diagram__icon * { color: inherit !important; fill: currentColor !important; }
+  /* v9.2 — App Studio page editor: per-component floating toolbar (was square #81a1c1 tiles with dark glyphs),
+     width chip, property-field underline */
+  .app-studio-designer .ep-toolbar-left, .app-studio-designer .ep-toolbar-right { background: #434c5e !important; border: 1px solid #4c566a !important; border-radius: 6px !important; padding: 1px !important; gap: 1px !important; box-shadow: 0 4px 12px rgba(0, 0, 0, .35) !important; display: inline-flex !important; align-items: center !important; }
+  .app-studio-designer .ep-toolbar-left .toolbar-item, .app-studio-designer .ep-toolbar-right .toolbar-item { background: transparent !important; color: #e5e9f0 !important; border-radius: 4px !important; width: 20px !important; height: 20px !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; }
+  .app-studio-designer .ep-toolbar-left .toolbar-item:hover { background: #4c566a !important; color: #88c0d0 !important; }
+  .app-studio-designer .ep-toolbar-left .toolbar-item.mdi-trash-can-outline:hover { background: rgba(191, 97, 106, .25) !important; color: #e5a0a6 !important; }
+  .app-studio-designer .ep-toolbar-left.disable-toolbar .toolbar-item.disabled, .app-studio-designer .ep-toolbar-left .toolbar-item[disabled] { opacity: .4 !important; }
+  .app-studio-designer .toolbar-item.size-info { width: auto !important; padding: 0 8px !important; background: #434c5e !important; color: #d8dee9 !important; font-weight: 600 !important; font-size: 11px !important; }
+  .app-studio-designer .ep-toolbar-right:has(> .size-info:only-child) { padding: 0 !important; }
+  .app-studio-designer .grid-panel-layout kendo-floatinglabel.k-floating-label-container { box-shadow: none !important; }
 }
