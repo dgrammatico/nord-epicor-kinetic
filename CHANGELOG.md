@@ -1,5 +1,8 @@
 # Changelog
 
+## 9.1.2
+- Header action buttons: the "has entries" marker (e.g. on Change Log) is a small red dot at the icon's corner again, instead of a large circle covering the icon.
+
 ## 9.1.1
 - Home tiles look uniform again: unavailable ("Menu is not available") tiles are no longer dimmed.
 

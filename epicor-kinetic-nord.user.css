@@ -1,7 +1,7 @@
 /* ==UserStyle==
 @name           Epicor Kinetic - Nord Polar Night
 @namespace      github.com/dgrammatico/nord-epicor-kinetic
-@version        9.1.1
+@version        9.1.2
 @description    Nord Polar Night dark theme for Epicor Kinetic (cloud and on-prem). Kendo UI colour variables + components, Epicor ep-/erp- wrappers.
 @author         Dominic Grammatico
 @homepageURL    https://github.com/dgrammatico/nord-epicor-kinetic
@@ -1227,4 +1227,16 @@
   .dhx_diagram_editor_shapebar path[fill="#EEF1F6" i] { fill: #3b4252 !important; }
   .dhx_diagram_editor_shapebar path[stroke="#B8C6D6" i] { stroke: #4c566a !important; }
   .dhx_diagram_editor_shapebar .dhx_diagram_item__text { color: #d8dee9 !important; }
+
+  /* v9.1.2 — header action "has entries" dot (e.g. Change Log): Epicor draws an 8px red dot beside the icon;
+     the generic action-button sizing blew it up to a 20px circle and squeezed the icon. Restore a small badge dot. */
+  .ep-action-buttons:has(> .ep-action-active-circle-icon) { position: relative !important; }
+  .ep-action-buttons > .ep-user-action-button:not(.ep-action-active-circle-icon) { width: 30px !important; min-width: 30px !important; }
+  .ep-action-buttons > .ep-user-action-button.ep-action-active-circle-icon.ep-action-active-circle-icon {
+    position: absolute !important; top: 4px !important; right: 3px !important; left: auto !important;
+    width: 8px !important; height: 8px !important; min-width: 0 !important; margin: 0 !important; padding: 0 !important;
+    font-size: 8px !important; line-height: 8px !important; color: #bf616a !important;
+    background: transparent !important; border: 0 !important; box-shadow: none !important; pointer-events: none !important;
+  }
+  .ep-action-buttons > .ep-action-active-circle-icon::before { line-height: 8px !important; }
 }
