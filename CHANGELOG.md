@@ -1,5 +1,21 @@
 # Changelog
 
+## 9.2.0
+- **Application Studio:** the left slide-out panels (Layouts, Rules, Events, Views, Data) were light with faint text. They are now raised Nord panels with rounded tree rows, hover and selected states, page-filled search fields and a matching add button. Also covered:
+  - The properties header is one raised bar. The zoom control no longer truncates to "10…", and Add/Edit/Delete Page are rounded text buttons.
+  - The properties tabs, component toolbox, Problems panel and the help and AI-chat panels inside the designer.
+- **BAQ / BPM studio:**
+  - Removed the off-palette block and white underline behind the header save/overflow icons, and the dark box behind the breadcrumb.
+  - Designer tabs are proper 32px chips.
+  - The code editor's minimap and overview ruler are now dark instead of black and grey.
+  - The table toolbox icons are visible, with rounded tiles.
+  - Query Diagram / Display Fields / Sort Order is a single segmented control.
+  - The query-properties tabs stay on one row.
+  - The Query Designer sidebar matches the other slide-out panels.
+- **Grids:** column headers are the same size and colour everywhere (some non-sortable headers were 14px and accent-coloured).
+- **Read-only fields:** use the design system's tinted disabled fill instead of a dashed outline.
+- **Toasts:** save, error and info pop-ups are now dark cards with a coloured edge. They were light grey. Tooltips get rounded corners and a hairline border.
+
 ## 9.1.2
 - Header action buttons: the "has entries" marker (e.g. on Change Log) is a small red dot at the icon's corner again, instead of a large circle covering the icon.
 
