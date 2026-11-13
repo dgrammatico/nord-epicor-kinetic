@@ -1,7 +1,7 @@
 /* ==UserStyle==
 @name           Epicor Kinetic - Nord Polar Night
 @namespace      github.com/dgrammatico/nord-epicor-kinetic
-@version        9.1.0
+@version        9.1.1
 @description    Nord Polar Night dark theme for Epicor Kinetic (cloud and on-prem). Kendo UI colour variables + components, Epicor ep-/erp- wrappers.
 @author         Dominic Grammatico
 @homepageURL    https://github.com/dgrammatico/nord-epicor-kinetic
@@ -1082,9 +1082,6 @@
   .k-grid .k-grid-norecords > td > p, .k-grid .k-grid-norecords > td > .k-grid-norecords-template { margin: 0 !important; padding: 8px 12px !important; box-sizing: border-box; text-align: left !important; }
 
   /* =================== v9.1 — Kinetic-wide sweep (studios, designers, reports, lookups) =================== */
-  /* v9.1 — disabled Home tiles ("Menu is not available") read as disabled */
-  .khp-tile.tile-background.disabled { opacity: .45 !important; cursor: not-allowed !important; filter: saturate(.5) !important; }
-  .khp-tile.tile-background.disabled:hover { transform: none !important; box-shadow: none !important; }
   /* v9.2 — checkbox "shape" tags (PO Approve/Hold/Unconfirmed…) as full-width field boxes */
   ep-tag:has(ep-check-box.check-box-shape), ep-tag:has(ep-check-box.check-box-shape) > .ep-tag { display: block !important; width: 100% !important; }
   ep-tag-item:has(> .ep-tag-item > .ep-shape-container > ep-check-box.check-box-shape),

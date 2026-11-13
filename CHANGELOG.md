@@ -1,11 +1,13 @@
 # Changelog
 
+## 9.1.1
+- Home tiles look uniform again: unavailable ("Menu is not available") tiles are no longer dimmed.
+
 ## 9.1.0
 Kinetic-wide sweep against the design system.
 - **Studios:** BAQ Designer, BPM Designer and Application Studio get the Nord chrome. This covers the header bar, tab strip, breadcrumbs, badges, category titles, toolbox labels, property panels and zoom control.
 - **Monaco editor:** the BAQ phrase and BPM/C# editors are remapped from the light "vs" theme to Nord. That includes the tokens, gutter, cursor, selection, widgets and minimap.
 - **Diagrams:** the BAQ Phrase Build, BPM workflow and App Studio page-map canvases get dark canvases and Nord cards and connectors. The BPM widget icons are made visible.
-- **Home:** disabled ("Menu is not available") tiles now look disabled.
 - **Entry forms:** checkbox "shape" tags (PO Approve/Hold/Unconfirmed) become full-width field boxes. Floating labels no longer run under lookup icons.
 - **Reports:** page titles truncate only when the header holds fields. Filter multi-selects match field height.
 - **Lookups:** the search slideout uses an even field rhythm.
